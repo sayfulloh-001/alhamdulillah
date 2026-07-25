@@ -1,0 +1,111 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+
+@theme {
+  --font-sans: 'Outfit', sans-serif;
+  --color-dehqon-green: #2E7D32;
+  --color-dehqon-dark: #1B5E20;
+  --color-dehqon-light: #E8F5E9;
+  --color-dehqon-accent: #81C784;
+  --color-premium-gold: #FFC107;
+  --color-premium-gold-dark: #FF8F00;
+}
+
+:root {
+  --bg-app: #FFFFFF;
+  --bg-card: #FFFFFF;
+  --bg-glass: rgba(255, 255, 255, 0.85);
+  --border-color: #E2ECE4;
+  --text-main: #1C3322;
+  --text-muted: #517158;
+  --shadow-color: rgba(46, 125, 50, 0.06);
+}
+
+.dark {
+  --bg-app: #080D09;
+  --bg-card: #0F1A11;
+  --bg-glass: rgba(15, 26, 17, 0.85);
+  --border-color: #1A2E20;
+  --text-main: #FFFFFF;
+  --text-muted: #85A38C;
+  --shadow-color: rgba(0, 0, 0, 0.3);
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-app);
+  color: var(--text-main);
+  transition: background-color 0.3s ease, color 0.3s ease;
+  overflow-x: hidden;
+}
+
+/* Glassmorphism utility */
+.glass {
+  background: var(--bg-glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 8px 32px 0 var(--shadow-color);
+}
+
+/* Smooth custom scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-dehqon-green);
+}
+
+/* Skeleton loader animation */
+@keyframes skeleton-loading {
+  0% {
+    background-color: rgba(46, 125, 50, 0.06);
+  }
+  50% {
+    background-color: rgba(46, 125, 50, 0.15);
+  }
+  100% {
+    background-color: rgba(46, 125, 50, 0.06);
+  }
+}
+
+.dark .skeleton {
+  @keyframes skeleton-loading-dark {
+    0% {
+      background-color: rgba(245, 245, 245, 0.04);
+    }
+    50% {
+      background-color: rgba(245, 245, 245, 0.1);
+    }
+    100% {
+      background-color: rgba(245, 245, 245, 0.04);
+    }
+  }
+  animation: skeleton-loading-dark 1.5s infinite ease-in-out;
+}
+
+.skeleton {
+  animation: skeleton-loading 1.5s infinite ease-in-out;
+  border-radius: 4px;
+}
+
+/* Smooth hover scaling */
+.hover-scale {
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
+}
+
+.hover-scale:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px var(--shadow-color);
+}
