@@ -7,7 +7,7 @@
     "start:server": "npm start --prefix server",
     "start:client": "npm run dev --prefix client",
     "build:client": "npm run build --prefix client",
-    "build": "npm run install:all && npm run build:client",
+    "build": "node build-all.js",
     "start": "npm run start:server",
     "dev": "node start-dev.js"
   }
