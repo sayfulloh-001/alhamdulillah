@@ -72,6 +72,12 @@ class DatabaseWrapper {
   }
 
   async initialize() {
+    if (isVercel) {
+      console.log("Vercel serverless environment detected. Direct fallback to JSON storage.");
+      this.setupJsonDb();
+      return;
+    }
+
     try {
       const sqlite3 = require('sqlite3').verbose();
       this.sqliteDb = new sqlite3.Database(dbFile, (err) => {
