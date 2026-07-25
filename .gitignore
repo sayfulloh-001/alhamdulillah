@@ -8,10 +8,9 @@ client/dist/
 
 # SQLite Database and local cache files
 server/*.db
-server/*.json
-server/*.log
+server/db_fallback.json
+db_fallback.json
 *.db
-*.json
 *.log
 
 # Environment variables
