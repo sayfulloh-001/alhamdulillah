@@ -79,7 +79,8 @@ class DatabaseWrapper {
     }
 
     try {
-      const sqlite3 = require('sqlite3').verbose();
+      const req = require;
+      const sqlite3 = req('sqlite3').verbose();
       this.sqliteDb = new sqlite3.Database(dbFile, (err) => {
         if (err) {
           console.warn("SQLite3 connection error, falling back to JSON storage:", err.message);
