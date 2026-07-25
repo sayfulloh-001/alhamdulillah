@@ -7,8 +7,14 @@ const path = require('path');
 // This ensures 100% reliability and zero installation friction for the user.
 
 let dbInstance = null;
-const dbFile = path.join(__dirname, 'data.db');
-const jsonDbFile = path.join(__dirname, 'db_fallback.json');
+
+// Vercel serverless functions have a read-only filesystem except for the /tmp directory.
+// We dynamically redirect database files to /tmp when running on Vercel.
+const isVercel = process.env.VERCEL === '1';
+const dbDir = isVercel ? '/tmp' : __dirname;
+
+const dbFile = path.join(dbDir, 'data.db');
+const jsonDbFile = path.join(dbDir, 'db_fallback.json');
 
 class JsonDatabase {
   constructor(filePath) {
