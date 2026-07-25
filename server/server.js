@@ -75,6 +75,10 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 // Start Server
-app.listen(PORT, () => {
-  console.log(`Dehqon Market backend running on port: ${PORT}`);
-});
+if (process.env.VERCEL !== '1') {
+  app.listen(PORT, () => {
+    console.log(`Dehqon Market backend running on port: ${PORT}`);
+  });
+}
+
+module.exports = app;
