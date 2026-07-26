@@ -19,22 +19,121 @@ const jsonDbFile = path.join(dbDir, 'db_fallback.json');
 class JsonDatabase {
   constructor(filePath) {
     this.filePath = filePath;
-    this.data = {
-      users: [],
-      products: [],
+    this.data = this.getInitialData();
+    this.init();
+  }
+
+  getInitialData() {
+    return {
+      users: [
+        {
+          id: 1,
+          first_name: 'Admin',
+          last_name: 'Tizim',
+          phone: '77777777777777777777',
+          region: 'Toshkent',
+          district: 'Yunusobod',
+          mahalla: 'Markaz',
+          password: 'admin_pass_hashed',
+          role: 'admin',
+          is_premium: 1,
+          premium_limit: 9999,
+          premium_status: 'approved',
+          avatar: '',
+          created_at: new Date().toISOString()
+        },
+        {
+          id: 2,
+          first_name: 'Otabek',
+          last_name: 'Fermer',
+          phone: '998901234567',
+          region: 'Toshkent viloyati',
+          district: 'Chirchiq',
+          mahalla: 'Bostan',
+          password: 'user_pass_hashed',
+          role: 'user',
+          is_premium: 1,
+          premium_limit: 100,
+          premium_status: 'approved',
+          avatar: '',
+          created_at: new Date().toISOString()
+        },
+        {
+          id: 3,
+          first_name: 'Javohir',
+          last_name: 'Dehqon',
+          phone: '998939876543',
+          region: 'Samarqand viloyati',
+          district: 'Jomboy',
+          mahalla: 'Zarafshon',
+          password: 'user_pass_hashed',
+          role: 'user',
+          is_premium: 0,
+          premium_limit: 2,
+          premium_status: 'none',
+          avatar: '',
+          created_at: new Date().toISOString()
+        }
+      ],
+      products: [
+        {
+          id: 1,
+          user_id: 2,
+          name: 'Shirin Uzum (Gulsurx)',
+          category: 'Mevalar',
+          fruit_type: 'Gulsurx',
+          harvest_year: 2026,
+          price: 18000,
+          quantity: '500 kg',
+          description: 'Toza tabiiy uzumlar, shirin va yangi uzilgan.',
+          phone: '998901234567',
+          region: 'Toshkent viloyati',
+          district: 'Chirchiq',
+          views: 45,
+          is_sold: 0,
+          is_premium: 1,
+          is_archived: 0,
+          image_url: 'https://images.unsplash.com/photo-1537640538966-79f369143f8f?auto=format&fit=crop&q=80&w=800',
+          created_at: new Date().toISOString()
+        },
+        {
+          id: 2,
+          user_id: 3,
+          name: 'Qizil Pomidor (Sarxom)',
+          category: 'Sabzavotlar',
+          fruit_type: 'Sarxom',
+          harvest_year: 2026,
+          price: 8000,
+          quantity: '2 tonna',
+          description: 'Issiqxonada yetishtirilgan sifatli pomidorlar.',
+          phone: '998939876543',
+          region: 'Samarqand viloyati',
+          district: 'Jomboy',
+          views: 28,
+          is_sold: 0,
+          is_premium: 0,
+          is_archived: 0,
+          image_url: 'https://images.unsplash.com/photo-1592924357228-91a4daadcfea?auto=format&fit=crop&q=80&w=800',
+          created_at: new Date().toISOString()
+        }
+      ],
       notifications: [],
       receipts: [],
       favorites: [],
       views: []
     };
-    this.init();
   }
 
   init() {
     if (fs.existsSync(this.filePath)) {
       try {
         const fileContent = fs.readFileSync(this.filePath, 'utf8');
-        this.data = JSON.parse(fileContent);
+        const parsed = JSON.parse(fileContent);
+        if (parsed && Array.isArray(parsed.users) && parsed.users.length > 0) {
+          this.data = parsed;
+        } else {
+          this.save();
+        }
       } catch (err) {
         console.error("Error reading fallback JSON database, resetting:", err);
         this.save();
@@ -235,11 +334,7 @@ class DatabaseWrapper {
     if (sql.includes('SELECT * FROM users WHERE id = ?')) {
       return data.users.filter(u => u.id === parseInt(params[0]));
     }
-    if (sql.includes('SELECT * FROM users')) {
-      // If rating
-      if (sql.includes('ORDER BY')) {
-        return [...data.users]; 
-      }
+    if (sql.includes('FROM users')) {
       return data.users;
     }
 
