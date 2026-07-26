@@ -126,9 +126,15 @@ router.post('/', authenticateToken, async (req, res) => {
   try {
     const { name, category, fruit_type, harvest_year, price, quantity, description, phone, region, district, image_url } = req.body;
 
-    if (!name || !category || !fruit_type || !harvest_year || !price || !quantity || !description || !phone || !region || !district || !image_url) {
-      return res.status(400).json({ message: 'Barcha maydonlar to\'ldirilishi shart.' });
+    if (!name || !price || !quantity || !description || !phone || !region) {
+      return res.status(400).json({ message: 'Mahsulot nomi, narxi, miqdori, telefon va viloyat kiritilishi shart.' });
     }
+
+    const finalCategory = category || 'Barchasi';
+    const finalFruitType = fruit_type || 'Meva/Nav';
+    const finalHarvestYear = harvest_year ? parseInt(harvest_year) : new Date().getFullYear();
+    const finalDistrict = district || region || 'Markaz';
+    const finalImageUrl = image_url || 'https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=800';
 
     // Get current user to check premium and limits
     let users = await db.query('SELECT * FROM users WHERE id = ?', [req.user.id]);
@@ -178,7 +184,7 @@ router.post('/', authenticateToken, async (req, res) => {
     const result = await db.run(
       `INSERT INTO products (user_id, name, category, fruit_type, harvest_year, price, quantity, description, phone, region, district, views, is_sold, is_premium, is_archived, image_url, created_at)
        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, 0, ?, 0, ?, ?)`,
-      [req.user.id, name, category, fruit_type, parseInt(harvest_year), parseFloat(price), quantity, description, phone, region, district, isPremiumAd, image_url, createdAt]
+      [req.user.id, name, finalCategory, finalFruitType, finalHarvestYear, parseFloat(price), quantity, description, phone, region, finalDistrict, isPremiumAd, finalImageUrl, createdAt]
     );
 
     // Update remaining limit indicator in user object/table if premium
