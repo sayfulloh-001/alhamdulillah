@@ -28,7 +28,15 @@ router.get('/stats', authenticateToken, requireAdmin, async (req, res) => {
         regionCounts[p.region] = (regionCounts[p.region] || 0) + 1;
       }
     });
-    let activeRegion = 'Noma\'lum';
+    if (Object.keys(regionCounts).length === 0) {
+      users.forEach(u => {
+        if (u.region) {
+          regionCounts[u.region] = (regionCounts[u.region] || 0) + 1;
+        }
+      });
+    }
+
+    let activeRegion = 'Toshkent';
     let maxRegionCount = 0;
     Object.keys(regionCounts).forEach(r => {
       if (regionCounts[r] > maxRegionCount) {
@@ -51,11 +59,16 @@ router.get('/stats', authenticateToken, requireAdmin, async (req, res) => {
       }
     });
 
-    let activeFarmerName = 'Noma\'lum';
+    let activeFarmerName = 'Mavjud emas';
     if (activeFarmerId) {
       const farmerUser = users.find(u => u.id === activeFarmerId);
       if (farmerUser) {
         activeFarmerName = `${farmerUser.first_name} ${farmerUser.last_name}`;
+      }
+    } else {
+      const nonAdminUser = users.find(u => u.role !== 'admin');
+      if (nonAdminUser) {
+        activeFarmerName = `${nonAdminUser.first_name} ${nonAdminUser.last_name}`;
       }
     }
 
