@@ -10,13 +10,11 @@ router.get('/stats', authenticateToken, requireAdmin, async (req, res) => {
     const products = await db.query('SELECT * FROM products');
     const views = await db.query('SELECT * FROM views');
 
-    const totalUsers = users.length;
-    const premiumUsers = users.filter(u => u.is_premium === 1 && u.role !== 'admin').length;
-    const normalUsers = totalUsers - premiumUsers - users.filter(u => u.role === 'admin').length;
-
-    // Today's products count
-    const today = new Date().toISOString().split('T')[0];
-    const todayProducts = products.filter(p => p.created_at && p.created_at.startsWith(today)).length;
+    const farmerUsers = users.filter(u => u.role !== 'admin');
+    const totalUsers = farmerUsers.length;
+    const premiumUsers = farmerUsers.filter(u => u.is_premium === 1).length;
+    const normalUsers = farmerUsers.filter(u => u.is_premium === 0).length;
+    const todayProducts = products.filter(p => !p.is_archived).length;
 
     // Today's views count (views from table views added today)
     const todayViews = products.reduce((acc, p) => acc + (p.views || 0), 0); // Simplified views count sum or check views table
