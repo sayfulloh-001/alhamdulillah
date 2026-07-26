@@ -134,89 +134,87 @@ export const Premium: React.FC<PremiumProps> = ({ currentUser, fetchProfile }) =
         </div>
       </div>
 
-      {/* Payment Instruction */}
-      {currentUser?.is_premium !== 1 && currentStatus !== 'pending' && (
-        <div className="bg-[var(--bg-card)] border border-[var(--border-color)] p-6 rounded-3xl shadow-sm space-y-6 animate-fade">
-          <div className="space-y-1 border-b border-[var(--border-color)] pb-3">
-            <h3 className="font-bold text-base text-[var(--text-main)]">1-qadam: To'lovni amalga oshiring</h3>
-            <p className="text-xs text-[var(--text-muted)]">Istalgan bank ilovasi (Click, Payme, Apelsin) orqali ushbu kartaga 49,000 so'm to'lang.</p>
-          </div>
-
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-[var(--bg-app)] border border-[var(--border-color)] p-4 rounded-2xl">
-            <div className="space-y-0.5">
-              <span className="text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-wider">Karta raqami (Humo)</span>
-              <span className="text-lg font-black text-[var(--text-main)] block tracking-wide">{cardNumber}</span>
-            </div>
-            <button
-              onClick={handleCopyCard}
-              className="w-full md:w-auto bg-[var(--bg-card)] border border-[var(--border-color)] hover:bg-[var(--dehqon-light)] dark:hover:bg-zinc-800 text-[var(--text-main)] font-semibold text-xs py-3 px-4 rounded-xl flex items-center justify-center gap-1.5 transition-colors active:scale-95 shadow-sm cursor-pointer"
-            >
-              {copied ? (
-                <>
-                  <Check className="w-4.5 h-4.5 text-green-600" /> Karta ko'chirildi
-                </>
-              ) : (
-                <>
-                  <Copy className="w-4.5 h-4.5 text-zinc-500" /> Kartani nusxalash
-                </>
-              )}
-            </button>
-          </div>
-
-          <div className="space-y-1 border-b border-[var(--border-color)] pb-3 pt-2">
-            <h3 className="font-bold text-base text-[var(--text-main)]">2-qadam: Chekni yuklang</h3>
-            <p className="text-xs text-[var(--text-muted)]">To'lov chekini rasm (WebP, JPG) yoki PDF formatida yuboring.</p>
-          </div>
-
-          {error && (
-            <div className="p-3 bg-red-50 dark:bg-red-950/20 text-red-600 border border-red-200 text-xs rounded-xl text-center font-medium">
-              {error}
-            </div>
-          )}
-
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="flex items-center justify-center w-full">
-              <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-[var(--border-color)] hover:border-[var(--color-dehqon-green)] rounded-2xl cursor-pointer bg-[var(--bg-app)] transition-colors relative overflow-hidden group">
-                <div className="flex flex-col items-center justify-center text-center space-y-1.5">
-                  <div className="p-2 bg-[var(--bg-card)] rounded-xl border border-[var(--border-color)] text-[var(--color-dehqon-green)]">
-                    <Upload className="w-4 h-4" />
-                  </div>
-                  {fileName ? (
-                    <span className="text-xs text-[var(--text-main)] font-semibold flex items-center gap-1">
-                      <FileText className="w-4 h-4 text-emerald-600" /> {fileName}
-                    </span>
-                  ) : (
-                    <>
-                      <p className="text-xs text-[var(--text-main)] font-semibold">Chek rasmi yoki PDF yuklash</p>
-                      <p className="text-[9px] text-[var(--text-muted)]">Maksimal hajm 300KB</p>
-                    </>
-                  )}
-                </div>
-                <input
-                  type="file"
-                  accept="image/*,application/pdf"
-                  className="hidden"
-                  onChange={handleReceiptUpload}
-                />
-              </label>
-            </div>
-
-            <button
-              type="submit"
-              disabled={submitting || !receipt}
-              className="w-full bg-[var(--color-dehqon-green)] hover:bg-[var(--color-dehqon-dark)] text-white font-bold py-3.5 rounded-2xl flex items-center justify-center gap-1.5 transition-all shadow-md active:scale-95 disabled:opacity-50 cursor-pointer text-sm"
-            >
-              {submitting ? (
-                <>
-                  <RefreshCw className="w-4 h-4 animate-spin" /> Yuborilmoqda...
-                </>
-              ) : (
-                'Tasdiqlash uchun yuborish'
-              )}
-            </button>
-          </form>
+      {/* Payment Instruction (Always visible for card copy & receipt upload) */}
+      <div className="bg-[var(--bg-card)] border border-[var(--border-color)] p-6 rounded-3xl shadow-sm space-y-6 animate-fade">
+        <div className="space-y-1 border-b border-[var(--border-color)] pb-3">
+          <h3 className="font-bold text-base text-[var(--text-main)]">1-qadam: To'lovni amalga oshiring</h3>
+          <p className="text-xs text-[var(--text-muted)]">Istalgan bank ilovasi (Click, Payme, Apelsin) orqali ushbu kartaga 49,000 so'm to'lang.</p>
         </div>
-      )}
+
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-[var(--bg-app)] border border-[var(--border-color)] p-4 rounded-2xl">
+          <div className="space-y-0.5">
+            <span className="text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-wider">Karta raqami (Humo)</span>
+            <span className="text-lg font-black text-[var(--text-main)] block tracking-wide">{cardNumber}</span>
+          </div>
+          <button
+            onClick={handleCopyCard}
+            className="w-full md:w-auto bg-[var(--bg-card)] border border-[var(--border-color)] hover:bg-[var(--dehqon-light)] dark:hover:bg-zinc-800 text-[var(--text-main)] font-semibold text-xs py-3 px-4 rounded-xl flex items-center justify-center gap-1.5 transition-colors active:scale-95 shadow-sm cursor-pointer"
+          >
+            {copied ? (
+              <>
+                <Check className="w-4.5 h-4.5 text-green-600" /> Karta ko'chirildi
+              </>
+            ) : (
+              <>
+                <Copy className="w-4.5 h-4.5 text-zinc-500" /> Kartani nusxalash
+              </>
+            )}
+          </button>
+        </div>
+
+        <div className="space-y-1 border-b border-[var(--border-color)] pb-3 pt-2">
+          <h3 className="font-bold text-base text-[var(--text-main)]">2-qadam: Chekni yuklang</h3>
+          <p className="text-xs text-[var(--text-muted)]">To'lov chekini rasm (WebP, JPG) yoki PDF formatida yuboring.</p>
+        </div>
+
+        {error && (
+          <div className="p-3 bg-red-50 dark:bg-red-950/20 text-red-600 border border-red-200 text-xs rounded-xl text-center font-medium">
+            {error}
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="flex items-center justify-center w-full">
+            <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-[var(--border-color)] hover:border-[var(--color-dehqon-green)] rounded-2xl cursor-pointer bg-[var(--bg-app)] transition-colors relative overflow-hidden group">
+              <div className="flex flex-col items-center justify-center text-center space-y-1.5">
+                <div className="p-2 bg-[var(--bg-card)] rounded-xl border border-[var(--border-color)] text-[var(--color-dehqon-green)]">
+                  <Upload className="w-4 h-4" />
+                </div>
+                {fileName ? (
+                  <span className="text-xs text-[var(--text-main)] font-semibold flex items-center gap-1">
+                    <FileText className="w-4 h-4 text-emerald-600" /> {fileName}
+                  </span>
+                ) : (
+                  <>
+                    <p className="text-xs text-[var(--text-main)] font-semibold">Chek rasmi yoki PDF yuklash</p>
+                    <p className="text-[9px] text-[var(--text-muted)]">Maksimal hajm 300KB</p>
+                  </>
+                )}
+              </div>
+              <input
+                type="file"
+                accept="image/*,application/pdf"
+                className="hidden"
+                onChange={handleReceiptUpload}
+              />
+            </label>
+          </div>
+
+          <button
+            type="submit"
+            disabled={submitting || !receipt}
+            className="w-full bg-[#F59E0B] hover:bg-[#D97706] text-white font-bold py-3.5 rounded-2xl flex items-center justify-center gap-1.5 transition-all shadow-md active:scale-95 disabled:opacity-50 cursor-pointer text-sm"
+          >
+            {submitting ? (
+              <>
+                <RefreshCw className="w-4 h-4 animate-spin" /> Yuborilmoqda...
+              </>
+            ) : (
+              'Tasdiqlash uchun yuborish'
+            )}
+          </button>
+        </form>
+      </div>
 
       {/* Pending status details block */}
       {currentStatus === 'pending' && (
