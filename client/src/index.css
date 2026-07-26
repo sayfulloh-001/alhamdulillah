@@ -1,5 +1,5 @@
-@import "tailwindcss";
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+@import "tailwindcss";
 
 @theme {
   --font-sans: 'Outfit', sans-serif;
@@ -80,18 +80,19 @@ body {
   }
 }
 
-.dark .skeleton {
-  @keyframes skeleton-loading-dark {
-    0% {
-      background-color: rgba(245, 245, 245, 0.04);
-    }
-    50% {
-      background-color: rgba(245, 245, 245, 0.1);
-    }
-    100% {
-      background-color: rgba(245, 245, 245, 0.04);
-    }
+@keyframes skeleton-loading-dark {
+  0% {
+    background-color: rgba(245, 245, 245, 0.04);
   }
+  50% {
+    background-color: rgba(245, 245, 245, 0.1);
+  }
+  100% {
+    background-color: rgba(245, 245, 245, 0.04);
+  }
+}
+
+.dark .skeleton {
   animation: skeleton-loading-dark 1.5s infinite ease-in-out;
 }
 
