@@ -5,13 +5,10 @@ const path = require('path');
 console.log('=== Building Dehqon Market Full-Stack Application ===');
 
 try {
-  console.log('1. Installing workspace dependencies...');
-  execSync('npm install --prefix server && npm install --prefix client --legacy-peer-deps', { stdio: 'inherit' });
-
-  console.log('2. Compiling Vite React Client...');
+  console.log('1. Compiling Vite React Client...');
   execSync('npm run build --prefix client', { stdio: 'inherit' });
 
-  console.log('3. Mirroring build output to root dist directory...');
+  console.log('2. Mirroring build output to root dist directory...');
   const srcDist = path.join(__dirname, 'client', 'dist');
   const destDist = path.join(__dirname, 'dist');
 
