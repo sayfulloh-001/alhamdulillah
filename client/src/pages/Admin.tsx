@@ -19,7 +19,7 @@ export const Admin: React.FC = () => {
   const [users, setUsers] = useState<any[]>([]);
   const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState('dashboard'); // 'dashboard', 'receipts', 'users', 'products'
+  const [activeTab, setActiveTab] = useState('receipts'); // 'receipts', 'users', 'products'
   const [rejectComment, setRejectComment] = useState('');
   const [showRejectInput, setShowRejectInput] = useState<number | null>(null);
 
@@ -117,7 +117,6 @@ export const Admin: React.FC = () => {
         {/* Tab selection links */}
         <div className="flex gap-2 overflow-x-auto no-scrollbar py-0.5">
           {[
-            { id: 'dashboard', label: 'Statistika', icon: BarChart3 },
             { id: 'receipts', label: 'Cheklar', icon: FileText },
             { id: 'users', label: 'Foydalanuvchilar', icon: Users },
             { id: 'products', label: 'Mahsulotlar', icon: Package }
@@ -141,82 +140,6 @@ export const Admin: React.FC = () => {
           })}
         </div>
       </div>
-
-      {/* 1. DASHBOARD STATS TAB */}
-      {activeTab === 'dashboard' && (
-        <div className="space-y-6 animate-fade">
-          {loading ? (
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {Array.from({ length: 4 }).map((_, idx) => (
-                <div key={idx} className="skeleton h-24 rounded-2xl" />
-              ))}
-            </div>
-          ) : (
-            (() => {
-              const activeStats = stats || { total_users: 0, premium_users: 0, normal_users: 0, today_products: 0, today_views: 0, active_region: 'Noma\'lum', active_farmer: 'Noma\'lum' };
-              return (
-                <>
-              {/* Numeric grids */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div className="bg-[var(--bg-card)] border border-[var(--border-color)] p-5 rounded-2xl shadow-sm space-y-1.5">
-                  <span className="text-[10px] uppercase font-bold text-[var(--text-muted)] tracking-wider">Jami foydalanuvchilar</span>
-                  <div className="flex items-baseline justify-between">
-                    <span className="text-2xl font-black text-[var(--text-main)]">{activeStats.total_users}</span>
-                    <Users className="w-5 h-5 text-zinc-400" />
-                  </div>
-                </div>
-
-                <div className="bg-[var(--bg-card)] border border-[var(--border-color)] p-5 rounded-2xl shadow-sm space-y-1.5">
-                  <span className="text-[10px] uppercase font-bold text-[var(--text-muted)] tracking-wider">Premium A'zolar</span>
-                  <div className="flex items-baseline justify-between">
-                    <span className="text-2xl font-black text-amber-500">{activeStats.premium_users}</span>
-                    <Sparkles className="w-5 h-5 text-amber-500 animate-pulse" />
-                  </div>
-                </div>
-
-                <div className="bg-[var(--bg-card)] border border-[var(--border-color)] p-5 rounded-2xl shadow-sm space-y-1.5">
-                  <span className="text-[10px] uppercase font-bold text-[var(--text-muted)] tracking-wider">Oddiy dehqonlar</span>
-                  <div className="flex items-baseline justify-between">
-                    <span className="text-2xl font-black text-[var(--text-main)]">{activeStats.normal_users}</span>
-                    <Users className="w-5 h-5 text-zinc-400" />
-                  </div>
-                </div>
-
-                <div className="bg-[var(--bg-card)] border border-[var(--border-color)] p-5 rounded-2xl shadow-sm space-y-1.5">
-                  <span className="text-[10px] uppercase font-bold text-[var(--text-muted)] tracking-wider">Bugungi e'lonlar</span>
-                  <div className="flex items-baseline justify-between">
-                    <span className="text-2xl font-black text-[var(--color-dehqon-green)] dark:text-[var(--color-dehqon-accent)]">{activeStats.today_products}</span>
-                    <Package className="w-5 h-5 text-[var(--color-dehqon-green)]" />
-                  </div>
-                </div>
-              </div>
-
-              {/* Extra detailed insights */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="bg-[var(--bg-card)] border border-[var(--border-color)] p-5 rounded-2xl shadow-sm space-y-4">
-                  <h3 className="font-bold text-sm text-[var(--text-main)] flex items-center gap-1">
-                    <MapPin className="w-4 h-4 text-emerald-500" /> Eng faol hudud (Viloyat)
-                  </h3>
-                  <div className="p-4 bg-[var(--bg-app)] rounded-xl border border-[var(--border-color)] text-center font-bold text-lg text-[var(--text-main)]">
-                    {activeStats.active_region}
-                  </div>
-                </div>
-
-                <div className="bg-[var(--bg-card)] border border-[var(--border-color)] p-5 rounded-2xl shadow-sm space-y-4">
-                  <h3 className="font-bold text-sm text-[var(--text-main)] flex items-center gap-1">
-                    <Award className="w-4 h-4 text-amber-500" /> Eng faol dehqon
-                  </h3>
-                  <div className="p-4 bg-[var(--bg-app)] rounded-xl border border-[var(--border-color)] text-center font-bold text-lg text-[var(--text-main)]">
-                    {activeStats.active_farmer}
-                  </div>
-                </div>
-              </div>
-            </>
-          );
-        })()
-      )}
-        </div>
-      )}
 
       {/* 2. RECEIPTS TAB */}
       {activeTab === 'receipts' && (
