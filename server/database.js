@@ -41,82 +41,9 @@ class JsonDatabase {
           premium_status: 'approved',
           avatar: '',
           created_at: new Date().toISOString()
-        },
-        {
-          id: 2,
-          first_name: 'Otabek',
-          last_name: 'Fermer',
-          phone: '998901234567',
-          region: 'Toshkent viloyati',
-          district: 'Chirchiq',
-          mahalla: 'Bostan',
-          password: 'user_pass_hashed',
-          role: 'user',
-          is_premium: 1,
-          premium_limit: 100,
-          premium_status: 'approved',
-          avatar: '',
-          created_at: new Date().toISOString()
-        },
-        {
-          id: 3,
-          first_name: 'Javohir',
-          last_name: 'Dehqon',
-          phone: '998939876543',
-          region: 'Samarqand viloyati',
-          district: 'Jomboy',
-          mahalla: 'Zarafshon',
-          password: 'user_pass_hashed',
-          role: 'user',
-          is_premium: 0,
-          premium_limit: 2,
-          premium_status: 'none',
-          avatar: '',
-          created_at: new Date().toISOString()
         }
       ],
-      products: [
-        {
-          id: 1,
-          user_id: 2,
-          name: 'Shirin Uzum (Gulsurx)',
-          category: 'Mevalar',
-          fruit_type: 'Gulsurx',
-          harvest_year: 2026,
-          price: 18000,
-          quantity: '500 kg',
-          description: 'Toza tabiiy uzumlar, shirin va yangi uzilgan.',
-          phone: '998901234567',
-          region: 'Toshkent viloyati',
-          district: 'Chirchiq',
-          views: 45,
-          is_sold: 0,
-          is_premium: 1,
-          is_archived: 0,
-          image_url: 'https://images.unsplash.com/photo-1537640538966-79f369143f8f?auto=format&fit=crop&q=80&w=800',
-          created_at: new Date().toISOString()
-        },
-        {
-          id: 2,
-          user_id: 3,
-          name: 'Qizil Pomidor (Sarxom)',
-          category: 'Sabzavotlar',
-          fruit_type: 'Sarxom',
-          harvest_year: 2026,
-          price: 8000,
-          quantity: '2 tonna',
-          description: 'Issiqxonada yetishtirilgan sifatli pomidorlar.',
-          phone: '998939876543',
-          region: 'Samarqand viloyati',
-          district: 'Jomboy',
-          views: 28,
-          is_sold: 0,
-          is_premium: 0,
-          is_archived: 0,
-          image_url: 'https://images.unsplash.com/photo-1592924357228-91a4daadcfea?auto=format&fit=crop&q=80&w=800',
-          created_at: new Date().toISOString()
-        }
-      ],
+      products: [],
       notifications: [],
       receipts: [],
       favorites: [],
@@ -462,14 +389,15 @@ class DatabaseWrapper {
 
     // 3. Insert Product
     if (sql.includes('INSERT INTO products')) {
+      const maxId = data.products.length > 0 ? Math.max(...data.products.map(p => p.id || 0)) : 0;
       const newProduct = {
-        id: data.products.length + 1,
+        id: maxId + 1,
         user_id: parseInt(params[0]),
         name: params[1],
         category: params[2],
         fruit_type: params[3],
-        harvest_year: parseInt(params[4]),
-        price: parseFloat(params[5]),
+        harvest_year: parseInt(params[4]) || new Date().getFullYear(),
+        price: parseFloat(params[5]) || 0,
         quantity: params[6],
         description: params[7],
         phone: params[8],
@@ -477,12 +405,12 @@ class DatabaseWrapper {
         district: params[10],
         views: 0,
         is_sold: 0,
-        is_premium: parseInt(params[11]),
+        is_premium: parseInt(params[11]) || 0,
         is_archived: 0,
         image_url: params[12],
         created_at: params[13] || new Date().toISOString()
       };
-      data.products.push(newProduct);
+      data.products.unshift(newProduct);
       this.jsonDb.save();
       return { lastID: newProduct.id };
     }
