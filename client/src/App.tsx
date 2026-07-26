@@ -79,8 +79,22 @@ function App() {
     }
   };
 
+  const setPageAndPersist = (page: string) => {
+    setCurrentPage(page);
+    cookieStorage.setItem('dehqon_active_page', page);
+  };
+
   const checkAuth = async () => {
     const token = cookieStorage.getItem('dehqon_token');
+    const cachedUserRaw = cookieStorage.getItem('dehqon_user');
+
+    if (cachedUserRaw) {
+      try {
+        const cachedUser = JSON.parse(cachedUserRaw);
+        setCurrentUser(cachedUser);
+      } catch (e) {}
+    }
+
     if (!token) {
       setCurrentPage('register');
       setLoading(false);
@@ -90,18 +104,22 @@ function App() {
     try {
       const user = await apiRequest('/auth/me');
       setCurrentUser(user);
+      cookieStorage.setItem('dehqon_user', JSON.stringify(user));
       
-      // If admin, go to admin page or home
-      if (user.role === 'admin') {
-        setCurrentPage('admin');
+      const savedPage = cookieStorage.getItem('dehqon_active_page');
+      if (savedPage && savedPage !== 'register') {
+        setCurrentPage(savedPage);
       } else {
-        setCurrentPage('home');
+        setCurrentPage(user.role === 'admin' ? 'admin' : 'home');
       }
     } catch (err) {
-      console.warn("Auth token invalid or expired. Routing to registration.");
-      cookieStorage.removeItem('dehqon_token');
-      cookieStorage.removeItem('dehqon_user');
-      setCurrentPage('register');
+      console.warn("Auth check warning:", err);
+      if (cachedUserRaw) {
+        try {
+          const cachedUser = JSON.parse(cachedUserRaw);
+          setCurrentUser(cachedUser);
+        } catch (e) {}
+      }
     } finally {
       setLoading(false);
     }
@@ -132,9 +150,9 @@ function App() {
     setCurrentUser(user);
     
     if (user.role === 'admin') {
-      setCurrentPage('admin');
+      setPageAndPersist('admin');
     } else {
-      setCurrentPage('home');
+      setPageAndPersist('home');
     }
   };
 
@@ -142,9 +160,9 @@ function App() {
   const renderPage = () => {
     switch (currentPage) {
       case 'home':
-        return <Home currentUser={currentUser} setPage={setCurrentPage} isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} />;
+        return <Home currentUser={currentUser} setPage={setPageAndPersist} isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} />;
       case 'my-ads':
-        return <MyAds currentUser={currentUser} setPage={setCurrentPage} fetchProfile={fetchProfile} />;
+        return <MyAds currentUser={currentUser} setPage={setPageAndPersist} fetchProfile={fetchProfile} />;
       case 'premium':
         return <Premium currentUser={currentUser} fetchProfile={fetchProfile} />;
       case 'rating':
@@ -156,7 +174,7 @@ function App() {
       case 'admin':
         return <Admin />;
       default:
-        return <Home currentUser={currentUser} setPage={setCurrentPage} isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} />;
+        return <Home currentUser={currentUser} setPage={setPageAndPersist} isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} />;
     }
   };
 
@@ -206,7 +224,7 @@ function App() {
       {/* 1. LEFT SIDEBAR LAYOUT FOR DESKTOP / NOTEBOOK */}
       <Sidebar
         currentPage={currentPage}
-        setPage={setCurrentPage}
+        setPage={setPageAndPersist}
         unreadCount={unreadCount}
         isAdmin={isAdmin}
         isDarkMode={isDarkMode}
@@ -231,7 +249,7 @@ function App() {
       {/* 3. BOTTOM NAV LAYOUT FOR PHONE */}
       <BottomNav
         currentPage={currentPage}
-        setPage={setCurrentPage}
+        setPage={setPageAndPersist}
         unreadCount={unreadCount}
       />
       
