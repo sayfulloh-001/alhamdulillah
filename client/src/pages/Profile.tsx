@@ -312,24 +312,6 @@ export const Profile: React.FC<ProfileProps> = ({ currentUser, fetchProfile }) =
         )}
       </div>
 
-      {/* Account Logout & Switch Account Section */}
-      <div className="pt-2">
-        <button
-          onClick={() => {
-            cookieStorage.removeItem('dehqon_token');
-            cookieStorage.removeItem('dehqon_user');
-            showToast('Tizimdan chiqildi. Boshqa akkauntga kirishingiz mumkin.', 'info');
-            setTimeout(() => {
-              window.location.reload();
-            }, 600);
-          }}
-          className="w-full bg-red-50 hover:bg-red-100 dark:bg-red-950/20 dark:hover:bg-red-900/30 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-900/30 font-bold py-3.5 px-4 rounded-2xl flex items-center justify-center gap-2 transition-all active:scale-95 cursor-pointer text-xs shadow-xs"
-        >
-          <LogOut className="w-4 h-4" />
-          Tizimdan chiqish (Boshqa akkauntga o'tish)
-        </button>
-      </div>
-
     </div>
   );
 };

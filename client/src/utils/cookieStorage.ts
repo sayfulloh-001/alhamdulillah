@@ -20,9 +20,9 @@ export const cookieStorage = {
   },
 
   setItem(key: string, value: string): void {
-    // Set cookie with far future expiration date (approx 1 year)
+    // Set cookie with permanent expiration date (approx 10 years)
     const d = new Date();
-    d.setTime(d.getTime() + (365 * 24 * 60 * 60 * 1000));
+    d.setTime(d.getTime() + (3650 * 24 * 60 * 60 * 1000));
     const expires = "expires=" + d.toUTCString();
     document.cookie = key + "=" + encodeURIComponent(value) + ";" + expires + ";path=/;SameSite=Strict";
   },
