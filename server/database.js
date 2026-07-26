@@ -326,23 +326,34 @@ class DatabaseWrapper {
 
     // 1. Insert User
     if (sql.includes('INSERT INTO users')) {
+      const maxId = data.users.length > 0 ? Math.max(...data.users.map(u => u.id || 0)) : 0;
+      const hasExplicitId = sql.includes('INSERT INTO users (id,') || sql.includes('INSERT INTO users (id ');
+      const paramOffset = hasExplicitId ? 1 : 0;
+      const explicitId = hasExplicitId ? parseInt(params[0]) : null;
+
       const newUser = {
-        id: data.users.length + 1,
-        first_name: params[0],
-        last_name: params[1],
-        phone: params[2],
-        region: params[3],
-        district: params[4],
-        mahalla: params[5],
-        password: params[6],
-        role: params[7] || 'user',
-        is_premium: params[8] || 0,
-        premium_limit: params[9] || 2,
-        premium_status: params[10] || 'none',
-        avatar: params[11] || '',
-        created_at: params[12] || new Date().toISOString()
+        id: explicitId || (maxId + 1),
+        first_name: params[0 + paramOffset] || 'Dehqon',
+        last_name: params[1 + paramOffset] || 'Fermer',
+        phone: params[2 + paramOffset] || '',
+        region: params[3 + paramOffset] || 'Toshkent',
+        district: params[4 + paramOffset] || 'Yunusobod',
+        mahalla: params[5 + paramOffset] || 'Markaz',
+        password: params[6 + paramOffset] || 'pass_hashed',
+        role: params[7 + paramOffset] || 'user',
+        is_premium: parseInt(params[8 + paramOffset]) || 0,
+        premium_limit: parseInt(params[9 + paramOffset]) || 2,
+        premium_status: params[10 + paramOffset] || 'none',
+        avatar: params[11 + paramOffset] || '',
+        created_at: params[12 + paramOffset] || new Date().toISOString()
       };
-      data.users.push(newUser);
+
+      const existingIdx = data.users.findIndex(u => (newUser.phone && u.phone === newUser.phone) || u.id === newUser.id);
+      if (existingIdx !== -1) {
+        data.users[existingIdx] = newUser;
+      } else {
+        data.users.push(newUser);
+      }
       this.jsonDb.save();
       return { lastID: newUser.id };
     }
