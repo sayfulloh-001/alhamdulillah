@@ -42,3 +42,5 @@ Render.com da yangi **Web Service** oching va GitHub repozitoriyangizni ulang:
 - **Env Variables**:
   - `NODE_ENV` = `production`
   - `JWT_SECRET` = `istalgan_secure_key`
+
+<!-- Vercel Deployment Trigger -->
