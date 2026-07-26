@@ -499,12 +499,14 @@ export const Home: React.FC<HomeProps> = ({ currentUser, setPage, isDarkMode, to
                   <div>
                     <span className="text-xs text-[var(--text-muted)] block">Narxi</span>
                     <span className="text-lg font-black text-[var(--color-dehqon-green)] dark:text-[var(--color-dehqon-accent)]">
-                      {selectedProduct.price.toLocaleString()} so'm
+                      {selectedProduct.price.toLocaleString()} so'm {selectedProduct.quantity.includes(' ') ? `/ ${selectedProduct.quantity.split(' ').slice(1).join(' ')}` : ''}
                     </span>
                   </div>
                   <div className="text-right">
-                    <span className="text-xs text-[var(--text-muted)] block">Miqdori (Hajmi)</span>
-                    <span className="text-sm font-bold text-[var(--text-main)]">{selectedProduct.quantity}</span>
+                    <span className="text-xs text-[var(--text-muted)] block">Mavjud miqdor</span>
+                    <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/30 px-2.5 py-1 rounded-lg border border-emerald-200 dark:border-emerald-800 inline-block mt-0.5">
+                      {selectedProduct.quantity}
+                    </span>
                   </div>
                 </div>
 

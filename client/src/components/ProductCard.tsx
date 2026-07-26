@@ -58,6 +58,16 @@ export const ProductCard: React.FC<ProductCardProps> = ({
     }
   };
 
+  // Extract unit if available from product.quantity (e.g. "500 kg" -> "/ kg")
+  const getUnit = (qtyStr: string) => {
+    if (!qtyStr) return '';
+    const parts = qtyStr.trim().split(' ');
+    if (parts.length >= 2) {
+      return `/ ${parts.slice(1).join(' ')}`;
+    }
+    return '';
+  };
+
   return (
     <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl overflow-hidden shadow-sm flex flex-col h-[420px] hover-scale relative group cursor-pointer" onClick={onClick}>
       {/* Badges and actions */}
@@ -137,10 +147,12 @@ export const ProductCard: React.FC<ProductCardProps> = ({
               <span className="text-lg font-bold text-[var(--color-dehqon-green)] dark:text-[var(--color-dehqon-accent)]">
                 {product.price.toLocaleString('uz-UZ')}
               </span>
-              <span className="text-xs text-[var(--text-muted)] ml-0.5">so'm</span>
+              <span className="text-xs text-[var(--text-muted)] ml-0.5">
+                so'm {getUnit(product.quantity)}
+              </span>
             </div>
-            <span className="text-xs font-semibold text-emerald-600 bg-emerald-50 dark:bg-emerald-950/30 px-1.5 py-0.5 rounded">
-              {product.quantity}
+            <span className="text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/30 px-2 py-0.5 rounded-md border border-emerald-200 dark:border-emerald-800">
+              Mavjud: {product.quantity}
             </span>
           </div>
 

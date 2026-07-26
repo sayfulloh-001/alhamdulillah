@@ -24,7 +24,8 @@ export const MyAds: React.FC<MyAdsProps> = ({ currentUser, setPage, fetchProfile
   const [fruitType, setFruitType] = useState('');
   const [harvestYear, setHarvestYear] = useState('');
   const [price, setPrice] = useState('');
-  const [quantity, setQuantity] = useState('');
+  const [quantityValue, setQuantityValue] = useState('');
+  const [quantityUnit, setQuantityUnit] = useState('kg');
   const [description, setDescription] = useState('');
   const [phone, setPhone] = useState('');
   const [region, setRegion] = useState('');
@@ -67,8 +68,10 @@ export const MyAds: React.FC<MyAdsProps> = ({ currentUser, setPage, fetchProfile
     e.preventDefault();
     setFormError('');
 
-    if (!name || !category || !fruitType || !harvestYear || !price || !quantity || !description || !phone || !region || !district || (!image && !editingProduct)) {
-      setFormError('Iltimos, barcha majdonlarni to\'ldiring va rasm yuklang.');
+    const fullQuantity = `${quantityValue} ${quantityUnit}`;
+
+    if (!name || !category || !fruitType || !harvestYear || !price || !quantityValue || !description || !phone || !region || !district || (!image && !editingProduct)) {
+      setFormError('Iltimos, barcha maydonlarni to\'ldiring va rasm yuklang.');
       return;
     }
 
@@ -85,7 +88,7 @@ export const MyAds: React.FC<MyAdsProps> = ({ currentUser, setPage, fetchProfile
             fruit_type: fruitType,
             harvest_year: harvestYear,
             price,
-            quantity,
+            quantity: fullQuantity,
             description,
             image_url: image
           })
@@ -101,7 +104,7 @@ export const MyAds: React.FC<MyAdsProps> = ({ currentUser, setPage, fetchProfile
             fruit_type: fruitType,
             harvest_year: harvestYear,
             price,
-            quantity,
+            quantity: fullQuantity,
             description,
             phone,
             region,
@@ -128,7 +131,8 @@ export const MyAds: React.FC<MyAdsProps> = ({ currentUser, setPage, fetchProfile
     setFruitType('');
     setHarvestYear('');
     setPrice('');
-    setQuantity('');
+    setQuantityValue('');
+    setQuantityUnit('kg');
     setDescription('');
     setPhone(currentUser?.phone || '');
     setRegion(currentUser?.region || '');
@@ -145,7 +149,17 @@ export const MyAds: React.FC<MyAdsProps> = ({ currentUser, setPage, fetchProfile
     setFruitType(p.fruit_type);
     setHarvestYear(p.harvest_year.toString());
     setPrice(p.price.toString());
-    setQuantity(p.quantity);
+    
+    // Parse quantity value and unit
+    const qtyParts = (p.quantity || '').trim().split(' ');
+    if (qtyParts.length >= 2) {
+      setQuantityValue(qtyParts[0]);
+      setQuantityUnit(qtyParts.slice(1).join(' '));
+    } else {
+      setQuantityValue(p.quantity || '');
+      setQuantityUnit('kg');
+    }
+
     setDescription(p.description);
     setPhone(p.phone);
     setRegion(p.region);
@@ -380,7 +394,9 @@ export const MyAds: React.FC<MyAdsProps> = ({ currentUser, setPage, fetchProfile
 
               {/* Price */}
               <div className="space-y-1">
-                <label className="text-xs font-semibold text-[var(--text-muted)]">Narxi (so'm)</label>
+                <label className="text-xs font-semibold text-[var(--text-muted)]">
+                  Narxi (1 {quantityUnit} uchun, so'mda)
+                </label>
                 <input
                   type="number"
                   required
@@ -390,18 +406,41 @@ export const MyAds: React.FC<MyAdsProps> = ({ currentUser, setPage, fetchProfile
                   className="w-full bg-[var(--bg-app)] border border-[var(--border-color)] px-3 py-2.5 rounded-xl text-sm focus:outline-none focus:ring-1 focus:ring-[var(--color-dehqon-green)]"
                 />
               </div>
+            </div>
 
-              {/* Quantity */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Quantity Value */}
               <div className="space-y-1">
-                <label className="text-xs font-semibold text-[var(--text-muted)]">Miqdori / Hajmi</label>
+                <label className="text-xs font-semibold text-[var(--text-muted)]">Sizda qancha bor? (Miqdori)</label>
                 <input
-                  type="text"
+                  type="number"
+                  step="any"
                   required
-                  placeholder="Masalan: 1.5 tonna, 500 kg"
-                  value={quantity}
-                  onChange={(e) => setQuantity(e.target.value)}
+                  placeholder="Masalan: 500"
+                  value={quantityValue}
+                  onChange={(e) => setQuantityValue(e.target.value)}
                   className="w-full bg-[var(--bg-app)] border border-[var(--border-color)] px-3 py-2.5 rounded-xl text-sm focus:outline-none focus:ring-1 focus:ring-[var(--color-dehqon-green)]"
                 />
+              </div>
+
+              {/* Quantity Unit */}
+              <div className="space-y-1">
+                <label className="text-xs font-semibold text-[var(--text-muted)]">O'lchov birligi</label>
+                <select
+                  required
+                  value={quantityUnit}
+                  onChange={(e) => setQuantityUnit(e.target.value)}
+                  className="w-full bg-[var(--bg-app)] border border-[var(--border-color)] px-3 py-2.5 rounded-xl text-sm font-semibold text-[var(--color-dehqon-green)] dark:text-[var(--color-dehqon-accent)] focus:outline-none focus:ring-1 focus:ring-[var(--color-dehqon-green)]"
+                >
+                  <option value="kg">kg (Kilogramm)</option>
+                  <option value="tonna">tonna (Tonna)</option>
+                  <option value="gramm">gramm (Gramm)</option>
+                  <option value="dona">dona (Shtuk)</option>
+                  <option value="qop">qop</option>
+                  <option value="litr">litr</option>
+                  <option value="yashik">yashik / quti</option>
+                  <option value="bog'">bog' / tuta</option>
+                </select>
               </div>
             </div>
 
