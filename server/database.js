@@ -56,8 +56,12 @@ class JsonDatabase {
       try {
         const fileContent = fs.readFileSync(this.filePath, 'utf8');
         const parsed = JSON.parse(fileContent);
-        if (parsed && Array.isArray(parsed.users) && parsed.users.length > 0) {
+        if (parsed && Array.isArray(parsed.users)) {
+          // Purge legacy test products and test users from filesystem storage
+          parsed.users = parsed.users.filter(u => u.phone !== '998901234567' && u.phone !== '998939876543');
+          parsed.products = (parsed.products || []).filter(p => p.name !== 'Shirin Uzum (Gulsurx)' && p.name !== 'Qizil Pomidor (Sarxom)' && p.user_id !== 2 && p.user_id !== 3);
           this.data = parsed;
+          this.save();
         } else {
           this.save();
         }
