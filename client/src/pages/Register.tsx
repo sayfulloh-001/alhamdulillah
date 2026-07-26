@@ -216,7 +216,7 @@ export const Register: React.FC<RegisterProps> = ({ onRegisterSuccess }) => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-[var(--color-dehqon-green)] hover:bg-[var(--color-dehqon-dark)] text-white font-semibold py-3 rounded-2xl flex items-center justify-center gap-2 transition-all hover:shadow-lg hover:shadow-green-950/15 active:scale-[0.98] disabled:opacity-50 mt-6"
+              className="w-full bg-[#F59E0B] hover:bg-[#D97706] text-white font-bold py-3 rounded-2xl flex items-center justify-center gap-2 transition-all hover:shadow-lg hover:shadow-amber-500/20 active:scale-[0.98] disabled:opacity-50 mt-6 cursor-pointer"
             >
               {loading ? 'Kutmoqda...' : 'Ro\'yxatdan o\'tish'}
               <ArrowRight className="w-4 h-4" />

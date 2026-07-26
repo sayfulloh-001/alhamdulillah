@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, MapPin, SlidersHorizontal, Eye, Calendar, Sparkles, Copy, Check, Phone, ArrowUpRight, Sun, Moon } from 'lucide-react';
+import { Search, MapPin, SlidersHorizontal, Eye, Calendar, Sparkles, Copy, Check, Phone, ArrowUpRight, Sun, Moon, Trash2 } from 'lucide-react';
 import { regionsData, categoriesData } from '../utils/regions';
 import { ProductCard, type Product } from '../components/ProductCard';
 import { SkeletonCard } from '../components/SkeletonCard';
@@ -178,7 +178,18 @@ export const Home: React.FC<HomeProps> = ({ currentUser, setPage, isDarkMode, to
       window.location.href = `tel:${product.phone}`;
     } else {
       setShowContactModal(product);
-      setCopied(false);
+    }
+  };
+
+  const handleDeleteProduct = async (productId: number) => {
+    if (!window.confirm("Haqiqatan ham bu e'loningizni o'chirmoqchimisiz?")) return;
+    try {
+      await apiRequest(`/products/${productId}`, { method: 'DELETE' });
+      showToast("E'loningiz muvaffaqiyatli o'chirildi.", 'success');
+      setSelectedProduct(null);
+      fetchProducts();
+    } catch (err) {
+      showToast("O'chirishda xatolik yuz berdi.", 'error');
     }
   };
 
@@ -230,16 +241,16 @@ export const Home: React.FC<HomeProps> = ({ currentUser, setPage, isDarkMode, to
       </div>
 
       {/* Main Slogan & Info Banner */}
-      <div className="p-6 bg-gradient-to-r from-emerald-800 to-green-700 text-white rounded-3xl shadow-md space-y-2 relative overflow-hidden">
+      <div className="p-6 bg-gradient-to-r from-blue-600 via-blue-700 to-emerald-600 text-white rounded-3xl shadow-md space-y-2 relative overflow-hidden">
         <div className="absolute right-0 bottom-0 opacity-10 transform translate-x-4 translate-y-4">
           <Sparkles className="w-48 h-48" />
         </div>
-        <span className="bg-emerald-600/50 text-[10px] uppercase font-bold tracking-widest px-2.5 py-1 rounded-full border border-emerald-500/20">
-          Uchashuv Joyi
+        <span className="bg-white/20 text-[10px] uppercase font-bold tracking-widest px-2.5 py-1 rounded-full border border-white/20 backdrop-blur-sm">
+          Uchrashuv Joyi
         </span>
         <h2 className="text-xl md:text-2xl font-extrabold">Dehqondan xaridorga bevosita.</h2>
-        <p className="text-xs md:text-sm text-emerald-100 max-w-lg font-light leading-relaxed">
-          Uzum Market uslubidagi premium qishloq xo'jaligi savdo maydonchasi. Bu yerda faqat haqiqiy dehqonlar va toza tabiiy hosillar.
+        <p className="text-xs md:text-sm text-blue-100 max-w-lg font-light leading-relaxed">
+          Zamonaviy qishloq xo'jaligi va toza tabiiy hosillar savdo maydonchasi.
         </p>
       </div>
 
@@ -439,6 +450,8 @@ export const Home: React.FC<HomeProps> = ({ currentUser, setPage, isDarkMode, to
                 onContact={() => handleContact(p)}
                 onShare={() => handleShare(p)}
                 onClick={() => handleProductClick(p)}
+                canDelete={currentUser && (currentUser.id === p.user_id || currentUser.role === 'admin')}
+                onDelete={() => handleDeleteProduct(p.id)}
               />
             ))}
           </div>
@@ -527,14 +540,24 @@ export const Home: React.FC<HomeProps> = ({ currentUser, setPage, isDarkMode, to
                 </div>
               </div>
 
-              <div className="flex gap-2">
+              <div className="flex flex-wrap gap-2">
                 <button
                   onClick={() => handleContact(selectedProduct)}
-                  className="flex-1 bg-[var(--color-dehqon-green)] hover:bg-[var(--color-dehqon-dark)] text-white font-bold py-3.5 rounded-2xl flex items-center justify-center gap-2 transition-all shadow-md active:scale-95 cursor-pointer"
+                  className="flex-1 bg-[#F59E0B] hover:bg-[#D97706] text-white font-bold py-3.5 rounded-2xl flex items-center justify-center gap-2 transition-all shadow-md active:scale-95 cursor-pointer text-xs"
                 >
                   <Phone className="w-4 h-4" />
                   Dehqon bilan bog'lanish
                 </button>
+                {currentUser && (currentUser.id === selectedProduct.user_id || currentUser.role === 'admin') && (
+                  <button
+                    onClick={() => handleDeleteProduct(selectedProduct.id)}
+                    className="px-4 py-3.5 bg-red-50 dark:bg-red-950/30 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-800 hover:bg-red-100 dark:hover:bg-red-900/40 font-bold rounded-2xl flex items-center justify-center gap-1.5 transition-all cursor-pointer text-xs"
+                    title={currentUser.role === 'admin' && currentUser.id !== selectedProduct.user_id ? "O'chirish (Admin huquqi bilan)" : "O'chirish (O'z e'loningiz)"}
+                  >
+                    <Trash2 className="w-4 h-4" />
+                    {currentUser.role === 'admin' && currentUser.id !== selectedProduct.user_id ? "O'chirish (Admin)" : "O'chirish"}
+                  </button>
+                )}
                 <button
                   onClick={() => setSelectedProduct(null)}
                   className="px-5 py-3.5 border border-[var(--border-color)] rounded-2xl text-xs font-bold text-[var(--text-main)] hover:bg-[var(--bg-app)] transition-colors cursor-pointer"

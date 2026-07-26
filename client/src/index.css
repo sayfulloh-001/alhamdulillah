@@ -3,31 +3,41 @@
 
 @theme {
   --font-sans: 'Outfit', sans-serif;
-  --color-dehqon-green: #2E7D32;
-  --color-dehqon-dark: #1B5E20;
-  --color-dehqon-light: #E8F5E9;
-  --color-dehqon-accent: #81C784;
-  --color-premium-gold: #FFC107;
-  --color-premium-gold-dark: #FF8F00;
+  --color-dehqon-green: #2563EB;
+  --color-dehqon-dark: #1D4ED8;
+  --color-dehqon-light: #EFF6FF;
+  --color-dehqon-accent: #10B981;
+  --color-brand-blue: #2563EB;
+  --color-brand-green: #10B981;
+  --color-brand-orange: #F59E0B;
+  --color-brand-darkgray: #1F2937;
+  --color-premium-gold: #F59E0B;
+  --color-premium-gold-dark: #D97706;
 }
 
 :root {
   --bg-app: #FFFFFF;
   --bg-card: #FFFFFF;
-  --bg-glass: rgba(255, 255, 255, 0.85);
-  --border-color: #E2ECE4;
-  --text-main: #1C3322;
-  --text-muted: #517158;
-  --shadow-color: rgba(46, 125, 50, 0.06);
+  --bg-glass: rgba(255, 255, 255, 0.9);
+  --border-color: #E5E7EB;
+  --text-main: #1F2937;
+  --text-muted: #4B5563;
+  --shadow-color: rgba(37, 99, 235, 0.08);
+
+  --color-primary: #2563EB;
+  --color-primary-hover: #1D4ED8;
+  --color-secondary: #10B981;
+  --color-orange: #F59E0B;
+  --color-orange-hover: #D97706;
 }
 
 .dark {
-  --bg-app: #080D09;
-  --bg-card: #0F1A11;
-  --bg-glass: rgba(15, 26, 17, 0.85);
-  --border-color: #1A2E20;
-  --text-main: #FFFFFF;
-  --text-muted: #85A38C;
+  --bg-app: #111827;
+  --bg-card: #1F2937;
+  --bg-glass: rgba(31, 41, 55, 0.9);
+  --border-color: #374151;
+  --text-main: #F9FAFB;
+  --text-muted: #9CA3AF;
   --shadow-color: rgba(0, 0, 0, 0.3);
 }
 

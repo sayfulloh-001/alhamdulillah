@@ -1,5 +1,5 @@
 import React from 'react';
-import { Heart, Share2, Phone, Eye, Calendar, MapPin, Sparkles } from 'lucide-react';
+import { Heart, Share2, Phone, Eye, Calendar, MapPin, Sparkles, Trash2 } from 'lucide-react';
 
 export interface Product {
   id: number;
@@ -29,6 +29,8 @@ interface ProductCardProps {
   onContact: () => void;
   onShare: () => void;
   onClick: () => void;
+  canDelete?: boolean;
+  onDelete?: () => void;
 }
 
 export const ProductCard: React.FC<ProductCardProps> = ({
@@ -38,6 +40,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   onContact,
   onShare,
   onClick,
+  canDelete,
+  onDelete,
 }) => {
   // Format Date beautifully
   const formatDate = (dateStr: string) => {
@@ -70,7 +74,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 
   return (
     <div className={`bg-[var(--bg-card)] rounded-2xl overflow-hidden shadow-sm flex flex-col h-[420px] hover-scale relative group cursor-pointer transition-all ${
-      product.is_premium === 1 ? 'border-2 border-amber-400/80 shadow-lg shadow-amber-500/10 dark:shadow-amber-500/10 ring-1 ring-amber-400/30' : 'border border-[var(--border-color)]'
+      product.is_premium === 1 ? 'border-2 border-emerald-400 shadow-lg shadow-blue-500/10 dark:shadow-emerald-500/10 ring-2 ring-amber-400/50' : 'border border-[var(--border-color)]'
     }`} onClick={onClick}>
       {/* Badges and actions */}
       <div className="relative w-full h-[200px] overflow-hidden bg-gray-100 dark:bg-zinc-800">
@@ -81,17 +85,31 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           loading="lazy"
         />
         
-        {/* Sold Badge */}
-        {product.is_sold === 1 && (
-          <div className="absolute top-3 left-3 bg-red-600 text-white text-xs font-bold px-2.5 py-1 rounded-full uppercase tracking-wider shadow-sm z-10">
-            Sotilgan
-          </div>
-        )}
+        {/* Sold Badge & Delete Action */}
+        <div className="absolute top-3 left-3 flex items-center gap-1.5 z-10">
+          {product.is_sold === 1 && (
+            <div className="bg-red-600 text-white text-xs font-bold px-2.5 py-1 rounded-full uppercase tracking-wider shadow-sm">
+              Sotilgan
+            </div>
+          )}
+          {canDelete && onDelete && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onDelete();
+              }}
+              className="bg-red-600/90 hover:bg-red-700 text-white w-8 h-8 rounded-full flex items-center justify-center shadow-md transition-all hover:scale-110 active:scale-95 cursor-pointer backdrop-blur-md"
+              title="Post/E'lonni o'chirish"
+            >
+              <Trash2 className="w-4 h-4" />
+            </button>
+          )}
+        </div>
 
-        {/* Premium Badge */}
+        {/* Premium Badge (Blue-Green-Yellow-White theme) */}
         {product.is_premium === 1 && (
-          <div className="absolute top-3 right-3 bg-gradient-to-r from-amber-500 via-amber-400 to-amber-600 text-white text-[11px] font-extrabold px-2.5 py-1 rounded-xl shadow-lg flex items-center gap-1.5 z-10 border border-amber-300 backdrop-blur-md">
-            <Sparkles className="w-3.5 h-3.5 fill-amber-200 text-white" />
+          <div className="absolute top-3 right-3 bg-gradient-to-r from-blue-600 via-emerald-500 to-amber-400 text-white text-[11px] font-extrabold px-2.5 py-1 rounded-xl shadow-lg flex items-center gap-1.5 z-10 border border-white backdrop-blur-md">
+            <Sparkles className="w-3.5 h-3.5 fill-amber-300 text-white" />
             ★ PREMIUM E'LON
           </div>
         )}
@@ -163,7 +181,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
               e.stopPropagation();
               onContact();
             }}
-            className="w-full bg-[var(--color-dehqon-green)] hover:bg-[var(--color-dehqon-dark)] text-white font-medium py-2 rounded-xl flex items-center justify-center gap-2 transition-all hover:shadow-md hover:shadow-green-950/10 active:scale-[0.98]"
+            className="w-full bg-[#F59E0B] hover:bg-[#D97706] text-white font-bold py-2 rounded-xl flex items-center justify-center gap-2 transition-all hover:shadow-md hover:shadow-amber-500/20 active:scale-[0.98] cursor-pointer"
           >
             <Phone className="w-4 h-4" />
             Bog'lanish

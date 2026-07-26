@@ -278,7 +278,7 @@ export const MyAds: React.FC<MyAdsProps> = ({ currentUser, setPage, fetchProfile
               setShowAddForm(true);
             }}
             disabled={isLimitReached}
-            className="bg-[var(--color-dehqon-green)] hover:bg-[var(--color-dehqon-dark)] text-white font-bold py-3 px-5 rounded-2xl flex items-center gap-1.5 transition-all shadow-md active:scale-[0.97] disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer text-xs"
+            className="bg-[#F59E0B] hover:bg-[#D97706] text-white font-bold py-3 px-5 rounded-2xl flex items-center gap-1.5 transition-all shadow-md active:scale-[0.97] disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer text-xs"
           >
             <Plus className="w-4.5 h-4.5" />
             Yangi mahsulot qo'shish
@@ -513,7 +513,7 @@ export const MyAds: React.FC<MyAdsProps> = ({ currentUser, setPage, fetchProfile
               <button
                 type="submit"
                 disabled={submitting}
-                className="flex-1 bg-[var(--color-dehqon-green)] hover:bg-[var(--color-dehqon-dark)] text-white font-bold py-3.5 rounded-2xl flex items-center justify-center gap-1.5 transition-all shadow-md active:scale-95 disabled:opacity-50 cursor-pointer"
+                className="flex-1 bg-[#F59E0B] hover:bg-[#D97706] text-white font-bold py-3.5 rounded-2xl flex items-center justify-center gap-1.5 transition-all shadow-md active:scale-95 disabled:opacity-50 cursor-pointer"
               >
                 {submitting ? (
                   <>

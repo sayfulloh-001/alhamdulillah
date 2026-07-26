@@ -93,41 +93,41 @@ export const Premium: React.FC<PremiumProps> = ({ currentUser, fetchProfile }) =
   return (
     <div className="space-y-6 pb-20 md:pb-6 max-w-2xl mx-auto">
       
-      {/* Premium Hero Promo Card */}
-      <div className="p-6 md:p-8 bg-gradient-to-r from-zinc-900 via-amber-950/20 to-zinc-950 text-white rounded-3xl border border-amber-500/20 shadow-xl space-y-4 relative overflow-hidden">
-        <div className="absolute right-0 bottom-0 opacity-15 pointer-events-none transform translate-x-6 translate-y-6">
-          <Sparkles className="w-48 h-48 text-amber-400 fill-amber-400" />
+      {/* Premium Hero Promo Card (Blue, Green, Yellow/Gold & White theme) */}
+      <div className="p-6 md:p-8 bg-gradient-to-br from-blue-950 via-emerald-950 to-zinc-950 text-white rounded-3xl border-2 border-emerald-400/40 shadow-2xl space-y-4 relative overflow-hidden ring-2 ring-amber-400/30">
+        <div className="absolute right-0 bottom-0 opacity-20 pointer-events-none transform translate-x-6 translate-y-6">
+          <Sparkles className="w-52 h-52 text-amber-400 fill-amber-300" />
         </div>
         
         <div className="flex items-center gap-2">
-          <span className="bg-amber-500 text-black text-[10px] font-bold uppercase px-2.5 py-1 rounded-full tracking-wider shadow-sm flex items-center gap-1">
-            <Sparkles className="w-3 h-3 fill-black" /> Premium Tarif
+          <span className="bg-gradient-to-r from-blue-500 via-emerald-400 to-amber-400 text-white text-[10px] font-extrabold uppercase px-3 py-1 rounded-full tracking-wider shadow-md flex items-center gap-1 border border-white">
+            <Sparkles className="w-3.5 h-3.5 fill-white" /> Premium VIP Tarif
           </span>
         </div>
 
         <div className="space-y-1">
-          <h2 className="text-xl md:text-2xl font-black text-amber-400">Dehqon Market Premium</h2>
-          <p className="text-xs md:text-sm text-zinc-300 leading-relaxed font-light">
-            E'lonlaringiz sonini 100 tagacha oshiring. Barcha mahsulotlaringiz asosiy sahifada eng yuqori o'rinlarda oltin rangli yorliq bilan ko'rsatiladi va sotilish imkoniyati 5 baravar ortadi.
+          <h2 className="text-xl md:text-2xl font-black bg-gradient-to-r from-blue-400 via-emerald-300 to-amber-300 bg-clip-text text-transparent">Dehqon Market Premium</h2>
+          <p className="text-xs md:text-sm text-zinc-100 leading-relaxed font-light">
+            E'lonlaringiz sonini 100 tagacha oshiring. Barcha mahsulotlaringiz asosiy sahifada eng yuqori o'rinlarda maxsus ramka va yorliq bilan ko'rsatiladi va sotilish imkoniyati 5 baravar ortadi.
           </p>
         </div>
 
-        <div className="pt-2 flex items-center justify-between border-t border-zinc-800">
+        <div className="pt-3 flex items-center justify-between border-t border-emerald-900/60">
           <div>
-            <span className="text-[10px] uppercase font-bold text-zinc-500 block">Bir martalik to'lov</span>
-            <span className="text-lg font-extrabold text-amber-300">49,000 so'm</span>
+            <span className="text-[10px] uppercase font-bold text-zinc-400 block">Bir martalik to'lov</span>
+            <span className="text-xl font-black text-amber-300 drop-shadow-sm">49,000 so'm</span>
           </div>
           
           {currentUser?.is_premium === 1 ? (
-            <div className="bg-emerald-600/30 text-emerald-400 border border-emerald-500/20 text-xs font-bold px-3.5 py-2 rounded-xl flex items-center gap-1">
-              <ShieldCheck className="w-4 h-4" /> Faol (100 mahsulot)
+            <div className="bg-gradient-to-r from-blue-600 to-emerald-600 text-white border border-white text-xs font-bold px-4 py-2 rounded-xl flex items-center gap-1.5 shadow-md">
+              <ShieldCheck className="w-4 h-4 text-amber-300" /> Faol (100 mahsulot)
             </div>
           ) : currentStatus === 'pending' ? (
-            <div className="bg-amber-600/30 text-amber-400 border border-amber-500/20 text-xs font-bold px-3.5 py-2 rounded-xl flex items-center gap-1">
+            <div className="bg-amber-500/30 text-amber-300 border border-amber-400/40 text-xs font-bold px-3.5 py-2 rounded-xl flex items-center gap-1">
               <Clock className="w-4 h-4 animate-spin" /> Tekshirilmoqda...
             </div>
           ) : (
-            <div className="bg-zinc-800 text-zinc-300 text-xs font-bold px-3.5 py-2 rounded-xl">
+            <div className="bg-zinc-800 text-zinc-300 text-xs font-bold px-3.5 py-2 rounded-xl border border-zinc-700">
               Faollashtirilmagan
             </div>
           )}

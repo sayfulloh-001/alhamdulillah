@@ -148,8 +148,8 @@ export const Profile: React.FC<ProfileProps> = ({ currentUser, fetchProfile }) =
                   {currentUser?.first_name} {currentUser?.last_name}
                 </h2>
                 {isPremium && (
-                  <span className="bg-amber-100 dark:bg-amber-950/30 text-amber-600 dark:text-amber-400 text-[10px] font-bold px-2 py-0.5 rounded-md flex items-center gap-0.5 border border-amber-300/20">
-                    <Sparkles className="w-3 h-3 fill-amber-500/10" /> Premium Dehqon
+                  <span className="bg-gradient-to-r from-blue-600 via-emerald-500 to-amber-400 text-white text-[10px] font-extrabold px-2.5 py-0.5 rounded-lg flex items-center gap-1 shadow-sm border border-white">
+                    <Sparkles className="w-3 h-3 fill-amber-300 text-white" /> Premium Dehqon
                   </span>
                 )}
               </div>
