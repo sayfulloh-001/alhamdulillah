@@ -382,8 +382,8 @@ export const Home: React.FC<HomeProps> = ({ currentUser, setPage, isDarkMode, to
         </div>
       )}
 
-      {/* Tabs / Filter Sections */}
-      <div className="flex border-b border-[var(--border-color)] overflow-x-auto no-scrollbar gap-5 text-sm font-medium scroll-smooth">
+      {/* Tabs / Filter Sections - 3 columns grid on Mobile, horizontal strip on Desktop */}
+      <div className="grid grid-cols-3 md:flex gap-2 md:gap-5 md:border-b md:border-[var(--border-color)] md:overflow-x-auto md:no-scrollbar text-xs md:text-sm font-medium">
         {[
           { id: 'all', label: 'Barcha e\'lonlar' },
           { id: 'popular', label: 'Eng ommabop' },
@@ -399,18 +399,16 @@ export const Home: React.FC<HomeProps> = ({ currentUser, setPage, isDarkMode, to
                 setTab(t.id);
                 setOffset(0);
               }}
-              className={`pb-3.5 px-1 border-b-2 font-bold cursor-pointer whitespace-nowrap transition-all ${
+              className={`px-2.5 py-2.5 md:py-0 md:pb-3.5 md:px-1 text-center font-bold cursor-pointer transition-all rounded-xl md:rounded-none border md:border-0 md:border-b-2 shadow-xs md:shadow-none flex items-center justify-center gap-1 ${
                 isActive
-                  ? 'border-[var(--color-dehqon-green)] text-[var(--color-dehqon-green)] dark:text-[var(--color-dehqon-accent)]'
-                  : 'border-transparent text-[var(--text-muted)] hover:text-[var(--text-main)]'
+                  ? 'bg-[var(--color-dehqon-green)] text-white border-[var(--color-dehqon-green)] md:bg-transparent md:border-[var(--color-dehqon-green)] md:text-[var(--color-dehqon-green)] md:dark:text-[var(--color-dehqon-accent)]'
+                  : 'bg-[var(--bg-card)] text-[var(--text-main)] border-[var(--border-color)] hover:bg-[var(--bg-app)] md:bg-transparent md:border-transparent md:text-[var(--text-muted)] md:hover:text-[var(--text-main)]'
               }`}
             >
-              {t.id === 'ai_recommended' ? (
-                <span className="flex items-center gap-1">
-                  <Sparkles className="w-4 h-4 animate-pulse fill-yellow-500/20" />
-                  {t.label}
-                </span>
-              ) : t.label}
+              {t.id === 'ai_recommended' && (
+                <Sparkles className={`w-3.5 h-3.5 animate-pulse ${isActive ? 'text-amber-300' : 'text-amber-500'}`} />
+              )}
+              <span className="truncate">{t.label}</span>
             </button>
           );
         })}
