@@ -32,7 +32,7 @@ export const Admin: React.FC = () => {
       setLoading(true);
       if (activeTab === 'dashboard') {
         const data = await apiRequest('/admin/stats');
-        setStats(data);
+        setStats(data || { total_users: 0, premium_users: 0, normal_users: 0, today_products: 0, today_views: 0, active_region: 'Noma\'lum', active_farmer: 'Noma\'lum' });
       } else if (activeTab === 'receipts') {
         const data = await apiRequest('/admin/receipts');
         setReceipts(data.filter((r: any) => r.status === 'Tekshirilmoqda'));
@@ -45,6 +45,7 @@ export const Admin: React.FC = () => {
       }
     } catch (err) {
       console.error(err);
+      setStats({ total_users: 0, premium_users: 0, normal_users: 0, today_products: 0, today_views: 0, active_region: 'Noma\'lum', active_farmer: 'Noma\'lum' });
     } finally {
       setLoading(false);
     }
@@ -150,14 +151,17 @@ export const Admin: React.FC = () => {
                 <div key={idx} className="skeleton h-24 rounded-2xl" />
               ))}
             </div>
-          ) : stats ? (
-            <>
+          ) : (
+            (() => {
+              const activeStats = stats || { total_users: 0, premium_users: 0, normal_users: 0, today_products: 0, today_views: 0, active_region: 'Noma\'lum', active_farmer: 'Noma\'lum' };
+              return (
+                <>
               {/* Numeric grids */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div className="bg-[var(--bg-card)] border border-[var(--border-color)] p-5 rounded-2xl shadow-sm space-y-1.5">
                   <span className="text-[10px] uppercase font-bold text-[var(--text-muted)] tracking-wider">Jami foydalanuvchilar</span>
                   <div className="flex items-baseline justify-between">
-                    <span className="text-2xl font-black text-[var(--text-main)]">{stats.total_users}</span>
+                    <span className="text-2xl font-black text-[var(--text-main)]">{activeStats.total_users}</span>
                     <Users className="w-5 h-5 text-zinc-400" />
                   </div>
                 </div>
@@ -165,7 +169,7 @@ export const Admin: React.FC = () => {
                 <div className="bg-[var(--bg-card)] border border-[var(--border-color)] p-5 rounded-2xl shadow-sm space-y-1.5">
                   <span className="text-[10px] uppercase font-bold text-[var(--text-muted)] tracking-wider">Premium A'zolar</span>
                   <div className="flex items-baseline justify-between">
-                    <span className="text-2xl font-black text-amber-500">{stats.premium_users}</span>
+                    <span className="text-2xl font-black text-amber-500">{activeStats.premium_users}</span>
                     <Sparkles className="w-5 h-5 text-amber-500 animate-pulse" />
                   </div>
                 </div>
@@ -173,7 +177,7 @@ export const Admin: React.FC = () => {
                 <div className="bg-[var(--bg-card)] border border-[var(--border-color)] p-5 rounded-2xl shadow-sm space-y-1.5">
                   <span className="text-[10px] uppercase font-bold text-[var(--text-muted)] tracking-wider">Oddiy dehqonlar</span>
                   <div className="flex items-baseline justify-between">
-                    <span className="text-2xl font-black text-[var(--text-main)]">{stats.normal_users}</span>
+                    <span className="text-2xl font-black text-[var(--text-main)]">{activeStats.normal_users}</span>
                     <Users className="w-5 h-5 text-zinc-400" />
                   </div>
                 </div>
@@ -181,7 +185,7 @@ export const Admin: React.FC = () => {
                 <div className="bg-[var(--bg-card)] border border-[var(--border-color)] p-5 rounded-2xl shadow-sm space-y-1.5">
                   <span className="text-[10px] uppercase font-bold text-[var(--text-muted)] tracking-wider">Bugungi e'lonlar</span>
                   <div className="flex items-baseline justify-between">
-                    <span className="text-2xl font-black text-[var(--color-dehqon-green)] dark:text-[var(--color-dehqon-accent)]">{stats.today_products}</span>
+                    <span className="text-2xl font-black text-[var(--color-dehqon-green)] dark:text-[var(--color-dehqon-accent)]">{activeStats.today_products}</span>
                     <Package className="w-5 h-5 text-[var(--color-dehqon-green)]" />
                   </div>
                 </div>
@@ -194,7 +198,7 @@ export const Admin: React.FC = () => {
                     <MapPin className="w-4 h-4 text-emerald-500" /> Eng faol hudud (Viloyat)
                   </h3>
                   <div className="p-4 bg-[var(--bg-app)] rounded-xl border border-[var(--border-color)] text-center font-bold text-lg text-[var(--text-main)]">
-                    {stats.active_region}
+                    {activeStats.active_region}
                   </div>
                 </div>
 
@@ -203,12 +207,14 @@ export const Admin: React.FC = () => {
                     <Award className="w-4 h-4 text-amber-500" /> Eng faol dehqon
                   </h3>
                   <div className="p-4 bg-[var(--bg-app)] rounded-xl border border-[var(--border-color)] text-center font-bold text-lg text-[var(--text-main)]">
-                    {stats.active_farmer}
+                    {activeStats.active_farmer}
                   </div>
                 </div>
               </div>
             </>
-          ) : null}
+          );
+        })()
+      )}
         </div>
       )}
 
