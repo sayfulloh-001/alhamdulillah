@@ -74,13 +74,16 @@ router.post('/login', async (req, res) => {
       return res.status(400).json({ message: 'Telefon va parol kiritilishi shart.' });
     }
 
+    const ADMIN_PHONE = process.env.ADMIN_PHONE || '77777777777777777777';
+    const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || '77777777777777777777';
+
     // SPECIAL CASE: Secret Admin Login
-    if (phone === '77777777777777777777' && password === '77777777777777777777') {
+    if (phone === ADMIN_PHONE && password === ADMIN_PASSWORD) {
       const adminUser = {
         id: 77777,
         first_name: 'Admin',
         last_name: 'Tizim',
-        phone: '77777777777777777777',
+        phone: ADMIN_PHONE,
         region: 'Toshkent',
         district: 'Yunusobod',
         mahalla: 'Markaz',
@@ -92,7 +95,7 @@ router.post('/login', async (req, res) => {
         created_at: new Date().toISOString()
       };
       // Check if admin user exists in DB, if not insert it
-      const adminExists = await db.query('SELECT * FROM users WHERE phone = ?', ['77777777777777777777']);
+      const adminExists = await db.query('SELECT * FROM users WHERE phone = ?', [ADMIN_PHONE]);
       if (adminExists.length === 0) {
         await db.run(
           `INSERT INTO users (first_name, last_name, phone, region, district, mahalla, password, role, is_premium, premium_limit, premium_status, avatar, created_at)
