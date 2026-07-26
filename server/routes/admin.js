@@ -224,10 +224,12 @@ router.post('/receipts/:id/reject', authenticateToken, requireAdmin, async (req,
 // LEADERBOARD / RATING TOP 15
 router.get('/leaderboard', async (req, res) => {
   try {
-    const users = await db.query('SELECT id, first_name, last_name, region, avatar FROM users');
+    const users = await db.query('SELECT * FROM users');
     const products = await db.query('SELECT * FROM products');
 
-    const leaderboard = users.map(user => {
+    const farmers = users.filter(u => u.role !== 'admin');
+
+    const leaderboard = farmers.map(user => {
       const userProducts = products.filter(p => p.user_id === user.id);
       const totalProducts = userProducts.length;
       const totalViews = userProducts.reduce((acc, p) => acc + (p.views || 0), 0);
@@ -247,20 +249,6 @@ router.get('/leaderboard', async (req, res) => {
         sold: totalSold,
         score
       };
-    });
-
-    // Sort by overall score descending and take TOP 15
-    leaderboard.sort((a, b) => b.score - a.score);
-    const top15 = leaderboard.slice(0, 15);
-
-    // Map medals dynamically
-    const finalTop15 = top15.map((user, idx) => {
-      let medal = '';
-      if (idx === 0) medal = '🥇';
-      else if (idx === 1) medal = '🥈';
-      else if (idx === 2) medal = '🥉';
-      else medal = `#${idx + 1}`;
-
       return {
         ...user,
         medal

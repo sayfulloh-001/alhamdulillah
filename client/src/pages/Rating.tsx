@@ -61,10 +61,14 @@ export const Rating: React.FC = () => {
           <p className="text-xs text-[var(--text-muted)]">Reyting ro'yxati yangilanmoqda...</p>
         </div>
       ) : leaderboard.length === 0 ? (
-        <div className="bg-[var(--bg-card)] border border-[var(--border-color)] p-12 text-center rounded-3xl space-y-3">
-          <Award className="w-12 h-12 text-zinc-300 mx-auto" />
-          <h3 className="font-bold text-base text-[var(--text-main)]">Ro'yxat bo'sh</h3>
-          <p className="text-xs text-[var(--text-muted)]">Hozircha yetarlicha faollikka ega dehqonlar mavjud emas.</p>
+        <div className="bg-[var(--bg-card)] border border-[var(--border-color)] p-12 text-center rounded-3xl space-y-3 shadow-sm">
+          <div className="w-16 h-16 rounded-2xl bg-emerald-500/10 text-[var(--color-dehqon-green)] flex items-center justify-center mx-auto">
+            <Trophy className="w-8 h-8" />
+          </div>
+          <h3 className="font-bold text-base text-[var(--text-main)]">Hozircha reyting bo'sh</h3>
+          <p className="text-xs text-[var(--text-muted)] max-w-md mx-auto">
+            Dehqonlar ro'yxatdan o'tib, o'z e'lonlarini qo'shganlaridan so'ng ushbu reyting jadvalida peshqadam bo'lib ko'rinadi.
+          </p>
         </div>
       ) : (
         <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-3xl overflow-hidden shadow-sm">
