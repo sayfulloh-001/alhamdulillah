@@ -69,7 +69,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   };
 
   return (
-    <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl overflow-hidden shadow-sm flex flex-col h-[420px] hover-scale relative group cursor-pointer" onClick={onClick}>
+    <div className={`bg-[var(--bg-card)] rounded-2xl overflow-hidden shadow-sm flex flex-col h-[420px] hover-scale relative group cursor-pointer transition-all ${
+      product.is_premium === 1 ? 'border-2 border-amber-400/80 shadow-lg shadow-amber-500/10 dark:shadow-amber-500/10 ring-1 ring-amber-400/30' : 'border border-[var(--border-color)]'
+    }`} onClick={onClick}>
       {/* Badges and actions */}
       <div className="relative w-full h-[200px] overflow-hidden bg-gray-100 dark:bg-zinc-800">
         <img
@@ -88,9 +90,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 
         {/* Premium Badge */}
         {product.is_premium === 1 && (
-          <div className="absolute top-3 right-3 bg-gradient-to-r from-amber-500 to-amber-600 text-white text-[11px] font-bold px-2 py-0.5 rounded-md shadow-md flex items-center gap-1 z-10 animate-pulse border border-amber-400">
-            <Sparkles className="w-3 h-3 fill-amber-300" />
-            Premium
+          <div className="absolute top-3 right-3 bg-gradient-to-r from-amber-500 via-amber-400 to-amber-600 text-white text-[11px] font-extrabold px-2.5 py-1 rounded-xl shadow-lg flex items-center gap-1.5 z-10 border border-amber-300 backdrop-blur-md">
+            <Sparkles className="w-3.5 h-3.5 fill-amber-200 text-white" />
+            ★ PREMIUM E'LON
           </div>
         )}
 
