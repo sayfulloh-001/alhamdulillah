@@ -131,11 +131,22 @@ router.post('/', authenticateToken, async (req, res) => {
     }
 
     // Get current user to check premium and limits
-    const users = await db.query('SELECT * FROM users WHERE id = ?', [req.user.id]);
+    let users = await db.query('SELECT * FROM users WHERE id = ?', [req.user.id]);
+    let user;
     if (users.length === 0) {
-      return res.status(404).json({ message: 'Foydalanuvchi topilmadi.' });
+      const isUserAdmin = req.user.role === 'admin';
+      const userLimit = isUserAdmin || req.user.is_premium ? 100 : 2;
+      const userPremStatus = isUserAdmin || req.user.is_premium ? 'approved' : 'none';
+      
+      await db.run(
+        `INSERT INTO users (id, first_name, last_name, phone, region, district, mahalla, password, role, is_premium, premium_limit, premium_status, avatar, created_at)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        [req.user.id, req.user.first_name || 'Dehqon', req.user.last_name || 'Fermer', req.user.phone || '998900000000', req.user.region || 'Toshkent', req.user.district || 'Yunusobod', 'Markaz', 'auto_pass', req.user.role || 'user', req.user.is_premium || (isUserAdmin ? 1 : 0), userLimit, userPremStatus, '', new Date().toISOString()]
+      );
+      user = { id: req.user.id, is_premium: req.user.is_premium || (isUserAdmin ? 1 : 0), role: req.user.role || 'user' };
+    } else {
+      user = users[0];
     }
-    const user = users[0];
 
     // Count user's active products (exclude archived)
     const userProducts = await db.query('SELECT * FROM products WHERE user_id = ? AND is_archived = 0', [req.user.id]);

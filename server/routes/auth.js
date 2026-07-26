@@ -79,8 +79,7 @@ router.post('/login', async (req, res) => {
 
     // SPECIAL CASE: Secret Admin Login
     if (phone === ADMIN_PHONE && password === ADMIN_PASSWORD) {
-      const adminUser = {
-        id: 77777,
+      let adminUser = {
         first_name: 'Admin',
         last_name: 'Tizim',
         phone: ADMIN_PHONE,
@@ -97,13 +96,14 @@ router.post('/login', async (req, res) => {
       // Check if admin user exists in DB, if not insert it
       const adminExists = await db.query('SELECT * FROM users WHERE phone = ?', [ADMIN_PHONE]);
       if (adminExists.length === 0) {
-        await db.run(
+        const result = await db.run(
           `INSERT INTO users (first_name, last_name, phone, region, district, mahalla, password, role, is_premium, premium_limit, premium_status, avatar, created_at)
            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
           [adminUser.first_name, adminUser.last_name, adminUser.phone, adminUser.region, adminUser.district, adminUser.mahalla, 'admin_pass_hashed', 'admin', 1, 9999, 'approved', '', adminUser.created_at]
         );
+        adminUser.id = result.lastID;
       } else {
-        adminUser.id = adminExists[0].id;
+        adminUser = adminExists[0];
       }
 
       const token = generateToken(adminUser);
