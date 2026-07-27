@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, MapPin, SlidersHorizontal, Eye, Calendar, Sparkles, Copy, Check, Phone, ArrowUpRight, Sun, Moon, Trash2 } from 'lucide-react';
+import { Search, MapPin, SlidersHorizontal, Eye, Calendar, Sparkles, Copy, Check, Phone, ArrowUpRight, Sun, Moon, Trash2, Download, Camera, Award } from 'lucide-react';
 import { regionsData, categoriesData } from '../utils/regions';
 import { ProductCard, type Product } from '../components/ProductCard';
 import { SkeletonCard } from '../components/SkeletonCard';
@@ -277,42 +277,124 @@ export const Home: React.FC<HomeProps> = ({ currentUser, setPage, isDarkMode, to
         </button>
       </div>
 
-      {/* Main Slogan & Info Banner */}
-      <div className="p-6 bg-gradient-to-r from-blue-600 via-blue-700 to-emerald-600 text-white rounded-3xl shadow-md space-y-2 relative overflow-hidden">
-        <div className="absolute right-0 bottom-0 opacity-10 transform translate-x-4 translate-y-4">
-          <Sparkles className="w-48 h-48" />
+      {/* Hero Banner Section matching dehqon.uz screenshot */}
+      <div className="relative rounded-3xl overflow-hidden shadow-xl border border-emerald-950/10 min-h-[300px] md:min-h-[340px] flex flex-col items-center justify-center text-center p-6 md:p-12">
+        {/* Background Image: Soil and young green sprouts close up */}
+        <img
+          src="https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?auto=format&fit=crop&w=1920&q=80"
+          alt="Dehqon soil background"
+          className="absolute inset-0 w-full h-full object-cover object-center"
+        />
+        {/* Deep Green Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#124E2A]/85 via-[#0D3B1F]/75 to-[#0A2E19]/90 backdrop-blur-[1px]" />
+
+        <div className="relative z-10 space-y-3 max-w-3xl mx-auto w-full">
+          <h1 className="font-serif text-3xl md:text-5xl font-bold text-white tracking-tight drop-shadow-md">
+            Qanday yordam kerak?
+          </h1>
+          <p className="text-xs md:text-base text-emerald-50/90 font-light max-w-xl mx-auto leading-relaxed">
+            Ilova, tashxis, bozor va profil sozlamalari bo'yicha tezkor yordam.
+          </p>
+
+          {/* Floating Search Bar matching dehqon.uz screenshot */}
+          <div className="pt-4 max-w-2xl mx-auto w-full">
+            <div className="bg-white dark:bg-[#15241C] p-2 md:p-2.5 rounded-2xl md:rounded-3xl shadow-2xl flex items-center gap-2 border border-white/20">
+              <input
+                type="text"
+                placeholder="Savol yoki mavzuni qidiring"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="flex-1 bg-transparent border-none px-4 py-2 text-sm text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 focus:outline-none font-medium"
+              />
+              <button
+                onClick={() => {
+                  setOffset(0);
+                  fetchProducts();
+                }}
+                className="bg-[#124E2A] hover:bg-[#0D3B1F] dark:bg-emerald-600 dark:hover:bg-emerald-700 text-white font-bold px-6 py-3 rounded-xl md:rounded-2xl text-xs md:text-sm shadow-md transition-all active:scale-95 cursor-pointer"
+              >
+                Qidirish
+              </button>
+            </div>
+          </div>
         </div>
-        <span className="bg-white/20 text-[10px] uppercase font-bold tracking-widest px-2.5 py-1 rounded-full border border-white/20 backdrop-blur-sm">
-          Uchrashuv Joyi
-        </span>
-        <h2 className="text-xl md:text-2xl font-extrabold">Dehqondan xaridorga bevosita.</h2>
-        <p className="text-xs md:text-sm text-blue-100 max-w-lg font-light leading-relaxed">
-          Zamonaviy qishloq xo'jaligi va toza tabiiy hosillar savdo maydonchasi.
-        </p>
       </div>
 
-      {/* Search and Filters Toggle */}
-      <div className="flex gap-2.5">
-        <div className="relative flex-1">
-          <Search className="absolute left-3.5 top-3.5 text-zinc-400 w-5 h-5" />
-          <input
-            type="text"
-            placeholder="Mahsulot nomi yoki kalit so'zlarni qidiring..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="w-full bg-[var(--bg-card)] border border-[var(--border-color)] pl-11 pr-4 py-3.5 rounded-2xl shadow-sm focus:outline-none focus:ring-1 focus:ring-[var(--color-dehqon-green)] text-sm"
-          />
+      {/* 3 Quick Action Cards matching dehqon.uz screenshot bottom */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        
+        {/* Card 1: Ilovani o'rnatish */}
+        <div 
+          onClick={() => showToast("Ilova tez kunda Google Play va App Store ga joylanadi!", 'info')}
+          className="bg-[var(--bg-card)] border border-[var(--border-color)] p-5 md:p-6 rounded-3xl shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer group flex flex-col justify-between space-y-4"
+        >
+          <div className="w-12 h-12 rounded-2xl bg-[#EBF4EE] dark:bg-emerald-950/40 text-[#124E2A] dark:text-emerald-400 flex items-center justify-center group-hover:scale-110 transition-transform">
+            <Download className="w-6 h-6 stroke-[2.2]" />
+          </div>
+          <div className="space-y-1">
+            <h3 className="font-bold text-base md:text-lg text-[var(--text-main)] group-hover:text-[#124E2A] dark:group-hover:text-emerald-400 transition-colors">
+              Ilovani o'rnatish
+            </h3>
+            <p className="text-xs text-[var(--text-muted)] font-light">
+              Yuklab olish va kirish.
+            </p>
+          </div>
         </div>
+
+        {/* Card 2: Tashxis olish */}
+        <div 
+          onClick={() => showToast("Tashxis tizimi: e'lon berishda o'simlik yoki hosil rasmini yuklang!", 'info')}
+          className="bg-[var(--bg-card)] border border-[var(--border-color)] p-5 md:p-6 rounded-3xl shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer group flex flex-col justify-between space-y-4"
+        >
+          <div className="w-12 h-12 rounded-2xl bg-[#EBF4EE] dark:bg-emerald-950/40 text-[#124E2A] dark:text-emerald-400 flex items-center justify-center group-hover:scale-110 transition-transform">
+            <Camera className="w-6 h-6 stroke-[2.2]" />
+          </div>
+          <div className="space-y-1">
+            <h3 className="font-bold text-base md:text-lg text-[var(--text-main)] group-hover:text-[#124E2A] dark:group-hover:text-emerald-400 transition-colors">
+              Tashxis olish
+            </h3>
+            <p className="text-xs text-[var(--text-muted)] font-light">
+              Rasm yuborish va natija.
+            </p>
+          </div>
+        </div>
+
+        {/* Card 3: XP va Rank tizimi */}
+        <div 
+          onClick={() => setPage('rating')}
+          className="bg-[var(--bg-card)] border border-[var(--border-color)] p-5 md:p-6 rounded-3xl shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer group flex flex-col justify-between space-y-4"
+        >
+          <div className="w-12 h-12 rounded-2xl bg-[#EBF4EE] dark:bg-emerald-950/40 text-[#124E2A] dark:text-emerald-400 flex items-center justify-center group-hover:scale-110 transition-transform">
+            <Award className="w-6 h-6 stroke-[2.2]" />
+          </div>
+          <div className="space-y-1">
+            <h3 className="font-bold text-base md:text-lg text-[var(--text-main)] group-hover:text-[#124E2A] dark:group-hover:text-emerald-400 transition-colors">
+              XP va Rank tizimi
+            </h3>
+            <p className="text-xs text-[var(--text-muted)] font-light">
+              Ball va darajalar.
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+      {/* Filter Toggle Button & Toolbar */}
+      <div className="flex justify-between items-center gap-3">
+        <h2 className="font-serif text-xl md:text-2xl font-bold text-[var(--text-main)] flex items-center gap-2">
+          <Sparkles className="w-5 h-5 text-[#124E2A] dark:text-emerald-400" />
+          Bozor E'lonlari
+        </h2>
         <button
           onClick={() => setShowFilters(!showFilters)}
-          className={`flex items-center gap-2 px-5 py-3.5 rounded-2xl font-semibold border transition-all text-sm cursor-pointer shadow-sm ${
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl font-semibold border transition-all text-xs cursor-pointer shadow-xs ${
             showFilters || region || category || minPrice || maxPrice || harvestYear
-              ? 'bg-[var(--color-dehqon-green)] text-white border-[var(--color-dehqon-green)]'
+              ? 'bg-[#124E2A] text-white border-[#124E2A]'
               : 'bg-[var(--bg-card)] text-[var(--text-main)] border-[var(--border-color)]'
           }`}
         >
           <SlidersHorizontal className="w-4 h-4" />
-          <span className="hidden md:inline">Filtrlar</span>
+          <span>Filtrlar</span>
         </button>
       </div>
 

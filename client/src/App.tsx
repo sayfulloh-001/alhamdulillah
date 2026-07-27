@@ -8,6 +8,7 @@ import { Notifications } from './pages/Notifications';
 import { Profile } from './pages/Profile';
 import { Admin } from './pages/Admin';
 import { Sidebar } from './components/Sidebar';
+import { Header } from './components/Header';
 import { BottomNav } from './components/BottomNav';
 import { apiRequest } from './utils/api';
 import { Leaf, RefreshCw, AlertCircle, CheckCircle, Info } from 'lucide-react';
@@ -202,8 +203,18 @@ function App() {
   const isAdmin = currentUser?.role === 'admin';
 
   return (
-    <div className="min-h-screen flex flex-col md:flex-row bg-[var(--bg-app)] text-[var(--text-main)] transition-colors">
+    <div className="min-h-screen flex flex-col bg-[var(--bg-app)] text-[var(--text-main)] transition-colors">
       
+      {/* 1. TOP HEADER BAR matching dehqon.uz screenshot */}
+      <Header
+        currentPage={currentPage}
+        setPage={setPageAndPersist}
+        currentUser={currentUser}
+        isDarkMode={isDarkMode}
+        toggleDarkMode={toggleDarkMode}
+        unreadCount={unreadCount}
+      />
+
       {/* Toast Alert overlay */}
       <AnimatePresence>
         {toast && (
@@ -211,7 +222,7 @@ function App() {
             initial={{ opacity: 0, y: -50, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -20, scale: 0.95 }}
-            className="fixed top-5 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 px-4 py-3 rounded-2xl glass shadow-xl border border-[var(--border-color)] max-w-sm"
+            className="fixed top-20 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 px-4 py-3 rounded-2xl glass shadow-xl border border-[var(--border-color)] max-w-sm"
           >
             {toast.type === 'success' && <CheckCircle className="w-5 h-5 text-emerald-500" />}
             {toast.type === 'error' && <AlertCircle className="w-5 h-5 text-red-500" />}
@@ -221,30 +232,32 @@ function App() {
         )}
       </AnimatePresence>
 
-      {/* 1. LEFT SIDEBAR LAYOUT FOR DESKTOP / NOTEBOOK */}
-      <Sidebar
-        currentPage={currentPage}
-        setPage={setPageAndPersist}
-        unreadCount={unreadCount}
-        isAdmin={isAdmin}
-        isDarkMode={isDarkMode}
-        toggleDarkMode={toggleDarkMode}
-      />
+      <div className="flex-1 flex flex-col md:flex-row max-w-7xl w-full mx-auto">
+        {/* 2. LEFT SIDEBAR LAYOUT FOR DESKTOP / NOTEBOOK */}
+        <Sidebar
+          currentPage={currentPage}
+          setPage={setPageAndPersist}
+          unreadCount={unreadCount}
+          isAdmin={isAdmin}
+          isDarkMode={isDarkMode}
+          toggleDarkMode={toggleDarkMode}
+        />
 
-      {/* 2. MAIN WINDOW CONTENT WRAPPER */}
-      <main className="flex-1 min-h-screen overflow-y-auto px-4 py-6 md:px-8 md:py-6">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={currentPage}
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.15, ease: 'easeInOut' }}
-          >
-            {renderPage()}
-          </motion.div>
-        </AnimatePresence>
-      </main>
+        {/* 3. MAIN WINDOW CONTENT WRAPPER */}
+        <main className="flex-1 min-h-screen overflow-y-auto px-4 py-6 md:px-8 md:py-6">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currentPage}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.15, ease: 'easeInOut' }}
+            >
+              {renderPage()}
+            </motion.div>
+          </AnimatePresence>
+        </main>
+      </div>
 
       {/* 3. BOTTOM NAV LAYOUT FOR PHONE */}
       <BottomNav
