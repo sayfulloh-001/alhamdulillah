@@ -30,7 +30,7 @@ app.use(express.urlencoded({ limit: '10mb', extended: true }));
 // Simple Rate Limiting Middleware
 const ipRequestLimits = new Map();
 const RATE_LIMIT_WINDOW = 60 * 1000; // 1 minute
-const MAX_REQUESTS = 100; // 100 requests per minute
+const MAX_REQUESTS = 300; // 300 requests per minute (allows smooth silent background polling)
 
 function rateLimiter(req, res, next) {
   const ip = req.ip;

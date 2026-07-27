@@ -72,9 +72,20 @@ export const Home: React.FC<HomeProps> = ({ currentUser, setPage, isDarkMode, to
     return () => clearTimeout(delayDebounceFn);
   }, [search]);
 
-  const fetchProducts = async (append = false) => {
+  // Silent real-time background auto-refresh (updates products every 3 seconds seamlessly without screen blinking)
+  useEffect(() => {
+    const silentInterval = setInterval(() => {
+      if (document.visibilityState === 'visible' && tab !== 'recently_viewed') {
+        fetchProducts(false, true);
+      }
+    }, 3000);
+
+    return () => clearInterval(silentInterval);
+  }, [tab, region, district, category, minPrice, maxPrice, harvestYear, search, offset]);
+
+  const fetchProducts = async (append = false, silent = false) => {
     try {
-      if (!append) setLoading(true);
+      if (!append && !silent) setLoading(true);
 
       // Handle local recently viewed tab client-side to save DB operations
       if (tab === 'recently_viewed') {
@@ -83,7 +94,7 @@ export const Home: React.FC<HomeProps> = ({ currentUser, setPage, isDarkMode, to
         if (ids.length === 0) {
           setProducts([]);
           setTotal(0);
-          setLoading(false);
+          if (!silent) setLoading(false);
           return;
         }
 
@@ -94,7 +105,7 @@ export const Home: React.FC<HomeProps> = ({ currentUser, setPage, isDarkMode, to
         filtered.sort((a: Product, b: Product) => ids.indexOf(b.id) - ids.indexOf(a.id));
         setProducts(filtered);
         setTotal(filtered.length);
-        setLoading(false);
+        if (!silent) setLoading(false);
         return;
       }
 
@@ -120,7 +131,7 @@ export const Home: React.FC<HomeProps> = ({ currentUser, setPage, isDarkMode, to
     } catch (err) {
       console.error("Fetch products error:", err);
     } finally {
-      setLoading(false);
+      if (!silent) setLoading(false);
     }
   };
 

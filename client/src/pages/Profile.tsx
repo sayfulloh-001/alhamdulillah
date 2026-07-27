@@ -39,12 +39,21 @@ export const Profile: React.FC<ProfileProps> = ({ currentUser, fetchProfile, set
       setDistrict(currentUser.district || '');
       setAvatar(currentUser.avatar || '');
       fetchUserProducts();
+
+      // Silent real-time background polling every 3 seconds
+      const interval = setInterval(() => {
+        if (document.visibilityState === 'visible') {
+          fetchUserProducts(true);
+        }
+      }, 3000);
+
+      return () => clearInterval(interval);
     }
   }, [currentUser]);
 
-  const fetchUserProducts = async () => {
+  const fetchUserProducts = async (silent = false) => {
     try {
-      setProductsLoading(true);
+      if (!silent) setProductsLoading(true);
       const data = await apiRequest('/products/user/me');
       const activeProducts = data.filter((p: any) => p.is_archived === 0);
       setMyProducts(activeProducts);
@@ -52,7 +61,7 @@ export const Profile: React.FC<ProfileProps> = ({ currentUser, fetchProfile, set
     } catch (err) {
       console.error("Fetch user products error:", err);
     } finally {
-      setProductsLoading(false);
+      if (!silent) setProductsLoading(false);
     }
   };
 
