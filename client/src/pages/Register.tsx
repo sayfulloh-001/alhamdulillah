@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Leaf, User, Phone, MapPin, Lock, ArrowRight, ShieldCheck } from 'lucide-react';
 import { regionsData } from '../utils/regions';
 import { apiRequest } from '../utils/api';
+import { SEOHead } from '../components/SEOHead';
 
 interface RegisterProps {
   onRegisterSuccess: (user: any, token: string) => void;
@@ -88,6 +89,10 @@ export const Register: React.FC<RegisterProps> = ({ onRegisterSuccess }) => {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-tr from-zinc-100 to-emerald-50 dark:from-zinc-950 dark:to-emerald-950/20">
+      <SEOHead
+        title="Ro'yxatdan O'tish — Dehqon Market | Bepul E'lon Joylashtirish"
+        description="Dehqon Market platformasida bepul ro'yxatdan o'ting va o'z meva, sabzavot hamda qishloq xo'jaligi e'lonlaringizni O'zbekiston bo'ylab tarqating."
+      />
       <div className="w-full max-w-lg bg-[var(--bg-card)] border border-[var(--border-color)] p-6 md:p-8 rounded-3xl shadow-xl flex flex-col gap-6 transition-all duration-300">
         
         {/* Brand Header */}

@@ -3,6 +3,7 @@ import { Search, MapPin, SlidersHorizontal, Eye, Calendar, Sparkles, Copy, Check
 import { regionsData, categoriesData } from '../utils/regions';
 import { ProductCard, type Product } from '../components/ProductCard';
 import { SkeletonCard } from '../components/SkeletonCard';
+import { SEOHead } from '../components/SEOHead';
 import { apiRequest } from '../utils/api';
 import { cookieStorage } from '../utils/cookieStorage';
 import { showToast } from '../utils/toast';
@@ -225,6 +226,42 @@ export const Home: React.FC<HomeProps> = ({ currentUser, setPage, isDarkMode, to
 
   return (
     <div className="space-y-6 pb-20 md:pb-6">
+      <SEOHead
+        title={category ? `${category} Sotib Olish va Sotish — Dehqon Market | Vositachisiz Qishloq Xo'jaligi Bozori` : "Dehqon Market — Dehqonchilik Mahsulotlari Sotish va Sotib Olish | #1 Agro Bozor"}
+        description={category ? `O'zbekistonda ${category} mahsulotlarini bevosita dehqon va fermerlardan eng hamyonbop narxlarda sotib oling yoki o'z e'loningizni joylashtiring.` : "O'zbekistondagi eng yirik dehqonchilik va qishloq xo'jaligi online bozori. Meva, sabzavot, poliz mahsulotlari, don va chorva mahsulotlarini vositachilarsiz arzon narxda sotib oling."}
+        structuredData={[
+          {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "Dehqon Market platformasida e'lon berish bepulmi?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Ha! Dehqon Market platformasida dehqon va fermerlar hamda xaridorlar mutlaqo bepul e'lon berishlari mumkin."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Qishloq xo'jaligi mahsulotlarini vositachisiz qanday sotib olish mumkin?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Dehqon Market orqali meva, sabzavot va boshqa dehqonchilik mahsulotlarini bevosita fermer va dehqon bilan telefon orqali bog'lanib, eng arzon ulgurji yoki chakana narxda xarid qilishingiz mumkin."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Dehqon Market O'zbekistonning qaysi hududlarini qamrab oladi?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Platformamiz Toshkent, Samarqand, Farg'ona, Andijon, Namangan, Buxoro, Surxondaryo, Qashqadaryo, Xorazm va respublikamizning barcha 14 ta hududini to'liq qamrab oladi."
+                }
+              }
+            ]
+          }
+        ]}
+      />
       
       {/* Top Mobile Bar with Light/Dark and Search */}
       <div className="flex md:hidden items-center justify-between gap-3">
@@ -470,6 +507,75 @@ export const Home: React.FC<HomeProps> = ({ currentUser, setPage, isDarkMode, to
           )}
         </div>
       )}
+
+      {/* SEO Keyword & FAQ Section for Google Top #1 Ranking */}
+      <section className="mt-12 p-6 md:p-8 bg-[var(--bg-card)] rounded-3xl border border-[var(--border-color)] space-y-6 shadow-sm">
+        <div className="space-y-2 border-b border-[var(--border-color)] pb-4">
+          <h1 className="text-lg md:text-2xl font-extrabold text-[var(--text-main)] flex items-center gap-2">
+            <Sparkles className="w-5 h-5 text-[var(--color-dehqon-green)]" />
+            Dehqon Market — O'zbekistondagi Eng Yirik Online Dehqonchilik Bozori
+          </h1>
+          <p className="text-xs md:text-sm text-[var(--text-muted)] font-light leading-relaxed">
+            Dehqon Market — bu O'zbekiston bo'ylab dehqonlar, fermerlar va ulgurji hamda chakana xaridorlarni to'g'ridan-to'g'ri bog'lovchi yagona zamonaviy qishloq xo'jaligi platformasidir. Bizning maqsaimiz — vositachilarsiz (posredniklarsiz) dehqonchilik mahsulotlarini eng hamyonbop narxlarda sotish va sotib olish imkoniyatini yaratishdir.
+          </p>
+        </div>
+
+        {/* Categories SEO Links grid */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
+          <div className="p-3 bg-[var(--bg-app)] rounded-2xl border border-[var(--border-color)] space-y-1">
+            <h2 className="font-bold text-[var(--text-main)] text-sm">🍎 Mevalar Bozori</h2>
+            <p className="text-[11px] text-[var(--text-muted)]">Uzum, olma, gilos, o'rik, shaftoli, anor va limon ulgurji narxda.</p>
+          </div>
+          <div className="p-3 bg-[var(--bg-app)] rounded-2xl border border-[var(--border-color)] space-y-1">
+            <h2 className="font-bold text-[var(--text-main)] text-sm">🥕 Sabzavotlar</h2>
+            <p className="text-[11px] text-[var(--text-muted)]">Pomidor, bodring, kartoshka, piyoz, sabzi va bulg'or qalampiri.</p>
+          </div>
+          <div className="p-3 bg-[var(--bg-app)] rounded-2xl border border-[var(--border-color)] space-y-1">
+            <h2 className="font-bold text-[var(--text-main)] text-sm">🍉 Poliz Hosillari</h2>
+            <p className="text-[11px] text-[var(--text-muted)]">Qovun, tarvuz, qovoq va Surxondaryo-Farg'ona erta hosillari.</p>
+          </div>
+          <div className="p-3 bg-[var(--bg-app)] rounded-2xl border border-[var(--border-color)] space-y-1">
+            <h2 className="font-bold text-[var(--text-main)] text-sm">🌾 Don va Chorva</h2>
+            <p className="text-[11px] text-[var(--text-muted)]">Bug'doy, makkajo'xori, burchak, press o't va chorvachilik e'lonlari.</p>
+          </div>
+        </div>
+
+        {/* SEO FAQ Section */}
+        <div className="space-y-4 pt-2">
+          <h2 className="text-base md:text-lg font-bold text-[var(--text-main)]">Ko'p Beriladigan Savollar (FAQ)</h2>
+          <div className="space-y-3">
+            <details className="group bg-[var(--bg-app)] p-4 rounded-2xl border border-[var(--border-color)] cursor-pointer">
+              <summary className="font-semibold text-xs md:text-sm text-[var(--text-main)] flex justify-between items-center list-none">
+                <span>1. Dehqon Market platformasida e'lon berish bepulmi?</span>
+                <span className="text-emerald-600 font-bold transition-transform group-open:rotate-180">+</span>
+              </summary>
+              <p className="text-xs text-[var(--text-muted)] mt-2 leading-relaxed font-light">
+                Ha! Dehqon Market platformasida har bir dehqon, fermer va sotuvchi o'z e'lonlarini mutlaqo bepul va cheklovlarsiz joylashtirishi mumkin.
+              </p>
+            </details>
+
+            <details className="group bg-[var(--bg-app)] p-4 rounded-2xl border border-[var(--border-color)] cursor-pointer">
+              <summary className="font-semibold text-xs md:text-sm text-[var(--text-main)] flex justify-between items-center list-none">
+                <span>2. Dehqon bilan qanday bog'lanish va narxni kelishish mumkin?</span>
+                <span className="text-emerald-600 font-bold transition-transform group-open:rotate-180">+</span>
+              </summary>
+              <p className="text-xs text-[var(--text-muted)] mt-2 leading-relaxed font-light">
+                E'lon card-ida yoki batafsil oynasida "Dehqon bilan bog'lanish" tugmasini bosing. Sizga dehqonning to'g'ridan-to'g'ri telefon raqami ko'rsatiladi va qo'ng'iroq qilishingiz mumkin.
+              </p>
+            </details>
+
+            <details className="group bg-[var(--bg-app)] p-4 rounded-2xl border border-[var(--border-color)] cursor-pointer">
+              <summary className="font-semibold text-xs md:text-sm text-[var(--text-main)] flex justify-between items-center list-none">
+                <span>3. Qaysi viloyatlardan e'lonlar qabul qilinadi?</span>
+                <span className="text-emerald-600 font-bold transition-transform group-open:rotate-180">+</span>
+              </summary>
+              <p className="text-xs text-[var(--text-muted)] mt-2 leading-relaxed font-light">
+                O'zbekiston Respublikasining barcha 14 ta hududidan (Toshkent, Samarqand, Farg'ona, Andijon, Namangan, Buxoro, Surxondaryo, Qashqadaryo, Xorazm, Navoiy, Jizzax, Sirdaryo va Qoraqalpog'iston) e'lonlar joylashtiriladi.
+              </p>
+            </details>
+          </div>
+        </div>
+      </section>
 
       {/* 1. PRODUCT DETAIL MODAL DIALOG */}
       {selectedProduct && (

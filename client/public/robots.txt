@@ -1,0 +1,20 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+Allow: /?*
+Allow: /static/
+Allow: /assets/
+Allow: /*.jpg
+Allow: /*.png
+Allow: /*.svg
+Allow: /*.webp
+
+Disallow: /admin
+Disallow: /profile
+Disallow: /my-ads
+Disallow: /notifications
+Disallow: /api/
+
+# Host & Sitemap definition
+Host: https://dehqon-sell.vercel.app
+Sitemap: https://dehqon-sell.vercel.app/sitemap.xml

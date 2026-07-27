@@ -3,6 +3,7 @@ import { Sparkles, Copy, Check, Upload, Clock, AlertTriangle, ShieldCheck, Refre
 import { apiRequest } from '../utils/api';
 import { compressImage } from '../utils/imageCompressor';
 import { showToast } from '../utils/toast';
+import { SEOHead } from '../components/SEOHead';
 
 interface PremiumProps {
   currentUser: any;
@@ -92,6 +93,10 @@ export const Premium: React.FC<PremiumProps> = ({ currentUser, fetchProfile }) =
 
   return (
     <div className="space-y-6 pb-20 md:pb-6 max-w-2xl mx-auto">
+      <SEOHead
+        title="Premium VIP Tarif — Dehqon Market | Cheksiz E'lonlar va TOP O'rinlar"
+        description="Dehqon Market Premium VIP obuna bo'ling: cheksiz e'lon joylashtirish, e'lonlaringizni TOP 1-o'rinda ko'rsatish va 10 barobar ko'proq xaridor topish imkoniyati."
+      />
       
       {/* Premium Hero Promo Card (Blue, Green, Yellow/Gold & White theme) */}
       <div className="p-6 md:p-8 bg-gradient-to-br from-blue-950 via-emerald-950 to-zinc-950 text-white rounded-3xl border-2 border-emerald-400/40 shadow-2xl space-y-4 relative overflow-hidden ring-2 ring-amber-400/30">

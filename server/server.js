@@ -66,6 +66,61 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'healthy', timestamp: new Date().toISOString() });
 });
 
+// Dynamic SEO Sitemap endpoint
+const db = require('./database');
+app.get(['/sitemap.xml', '/api/sitemap.xml'], async (req, res) => {
+  try {
+    const products = await db.query('SELECT id, name, created_at FROM products WHERE is_archived = 0');
+    const baseUrl = 'https://dehqon-sell.vercel.app';
+    const staticRoutes = [
+      { url: '/', priority: '1.0', changefreq: 'daily' },
+      { url: '/?category=Mevalar', priority: '0.9', changefreq: 'daily' },
+      { url: '/?category=Sabzavotlar', priority: '0.9', changefreq: 'daily' },
+      { url: '/?category=Poliz+mahsulotlari', priority: '0.9', changefreq: 'daily' },
+      { url: '/?category=Don+va+urug%27lar', priority: '0.8', changefreq: 'daily' },
+      { url: '/?category=Chorva+va+parrandachilik', priority: '0.8', changefreq: 'daily' },
+      { url: '/?region=Toshkent', priority: '0.85', changefreq: 'daily' },
+      { url: '/?region=Samarqand', priority: '0.85', changefreq: 'daily' },
+      { url: '/?region=Farg%27ona', priority: '0.85', changefreq: 'daily' },
+      { url: '/?page=premium', priority: '0.7', changefreq: 'monthly' }
+    ];
+
+    let xml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
+    xml += `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
+
+    // Static pages
+    staticRoutes.forEach(r => {
+      xml += `  <url>\n`;
+      xml += `    <loc>${baseUrl}${r.url}</loc>\n`;
+      xml += `    <lastmod>${new Date().toISOString().split('T')[0]}</lastmod>\n`;
+      xml += `    <changefreq>${r.changefreq}</changefreq>\n`;
+      xml += `    <priority>${r.priority}</priority>\n`;
+      xml += `  </url>\n`;
+    });
+
+    // Dynamic products from DB
+    if (Array.isArray(products)) {
+      products.forEach(p => {
+        const dateStr = p.created_at ? new Date(p.created_at).toISOString().split('T')[0] : new Date().toISOString().split('T')[0];
+        xml += `  <url>\n`;
+        xml += `    <loc>${baseUrl}/?product=${p.id}</loc>\n`;
+        xml += `    <lastmod>${dateStr}</lastmod>\n`;
+        xml += `    <changefreq>weekly</changefreq>\n`;
+        xml += `    <priority>0.75</priority>\n`;
+        xml += `  </url>\n`;
+      });
+    }
+
+    xml += `</urlset>`;
+
+    res.header('Content-Type', 'application/xml');
+    res.send(xml);
+  } catch (err) {
+    console.error("Sitemap generation error:", err);
+    res.status(500).send("Error generating sitemap");
+  }
+});
+
 // Serve frontend client in production build
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../client/dist')));
