@@ -170,7 +170,7 @@ function App() {
       case 'notifications':
         return <Notifications fetchNotificationsCount={fetchNotificationsCount} />;
       case 'profile':
-        return <Profile currentUser={currentUser} fetchProfile={fetchProfile} />;
+        return <Profile currentUser={currentUser} fetchProfile={fetchProfile} setPage={setPageAndPersist} />;
       case 'admin':
         return <Admin />;
       default:

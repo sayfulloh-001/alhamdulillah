@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { MapPin, Sparkles, Camera, Check, RefreshCw, Leaf, LogOut } from 'lucide-react';
+import { MapPin, Sparkles, Camera, Check, RefreshCw, Leaf, LogOut, Package, Plus, Trash2, Tag, Calendar, Eye } from 'lucide-react';
 import { regionsData } from '../utils/regions';
 import { apiRequest } from '../utils/api';
 import { compressImage } from '../utils/imageCompressor';
 import { showToast } from '../utils/toast';
 import { cookieStorage } from '../utils/cookieStorage';
+import { ProductCard, type Product } from '../components/ProductCard';
 
 interface ProfileProps {
   currentUser: any;
   fetchProfile: () => void;
+  setPage?: (page: string) => void;
 }
 
-export const Profile: React.FC<ProfileProps> = ({ currentUser, fetchProfile }) => {
+export const Profile: React.FC<ProfileProps> = ({ currentUser, fetchProfile, setPage }) => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [phone, setPhone] = useState('');
@@ -24,8 +26,9 @@ export const Profile: React.FC<ProfileProps> = ({ currentUser, fetchProfile }) =
   const [avatarLoading, setAvatarLoading] = useState(false);
   const [error, setError] = useState('');
 
-  // Count active ads
-  const [adsCount, setAdsCount] = useState(0);
+  // User's added products
+  const [myProducts, setMyProducts] = useState<Product[]>([]);
+  const [productsLoading, setProductsLoading] = useState(true);
 
   useEffect(() => {
     if (currentUser) {
@@ -35,15 +38,33 @@ export const Profile: React.FC<ProfileProps> = ({ currentUser, fetchProfile }) =
       setRegion(currentUser.region || '');
       setDistrict(currentUser.district || '');
       setAvatar(currentUser.avatar || '');
-      fetchUserAdsCount();
+      fetchUserProducts();
     }
   }, [currentUser]);
 
-  const fetchUserAdsCount = async () => {
+  const fetchUserProducts = async () => {
     try {
+      setProductsLoading(true);
       const data = await apiRequest('/products/user/me');
-      setAdsCount(data.filter((p: any) => p.is_archived === 0).length);
-    } catch {}
+      const activeProducts = data.filter((p: any) => p.is_archived === 0);
+      setMyProducts(activeProducts);
+      setAdsCount(activeProducts.length);
+    } catch (err) {
+      console.error("Fetch user products error:", err);
+    } finally {
+      setProductsLoading(false);
+    }
+  };
+
+  const handleDeleteProduct = async (productId: number) => {
+    if (!window.confirm("Haqiqatan ham ushbu e'loningizni o'chirmoqchimisiz?")) return;
+    try {
+      await apiRequest(`/products/${productId}`, { method: 'DELETE' });
+      showToast("E'loningiz muvaffaqiyatli o'chirildi.", 'success');
+      fetchUserProducts();
+    } catch (err) {
+      showToast("O'chirishda xatolik yuz berdi.", 'error');
+    }
   };
 
   const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -309,6 +330,116 @@ export const Profile: React.FC<ProfileProps> = ({ currentUser, fetchProfile }) =
               )}
             </button>
           </form>
+        )}
+      </div>
+
+      {/* User's Uploaded Products Section */}
+      <div className="bg-[var(--bg-card)] border border-[var(--border-color)] p-6 rounded-3xl shadow-sm space-y-5">
+        <div className="flex items-center justify-between border-b border-[var(--border-color)] pb-3">
+          <div className="flex items-center gap-2">
+            <Package className="w-5 h-5 text-[var(--color-dehqon-green)] dark:text-[var(--color-dehqon-accent)]" />
+            <h3 className="font-bold text-base text-[var(--text-main)]">
+              O'zim qo'shgan mahsulotlar
+            </h3>
+            <span className="bg-[var(--dehqon-light)] dark:bg-emerald-950/30 text-[var(--color-dehqon-green)] dark:text-[var(--color-dehqon-accent)] text-xs font-bold px-2.5 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-800">
+              {myProducts.length} ta
+            </span>
+          </div>
+
+          {setPage && (
+            <button
+              onClick={() => setPage('my-ads')}
+              className="bg-[var(--color-dehqon-green)] hover:bg-[var(--color-dehqon-dark)] text-white text-xs font-bold px-3.5 py-2 rounded-xl flex items-center gap-1.5 transition-all shadow-xs cursor-pointer active:scale-95"
+            >
+              <Plus className="w-4 h-4" />
+              <span>E'lon qo'shish</span>
+            </button>
+          )}
+        </div>
+
+        {productsLoading ? (
+          <div className="py-8 text-center text-xs text-[var(--text-muted)] flex items-center justify-center gap-2">
+            <RefreshCw className="w-4 h-4 animate-spin text-[var(--color-dehqon-green)]" />
+            <span>Mahsulotlaringiz yuklanmoqda...</span>
+          </div>
+        ) : myProducts.length === 0 ? (
+          <div className="py-10 text-center space-y-3 bg-[var(--bg-app)] rounded-2xl border border-[var(--border-color)] p-6">
+            <div className="w-12 h-12 rounded-full bg-emerald-100 dark:bg-emerald-950/40 text-[var(--color-dehqon-green)] flex items-center justify-center mx-auto shadow-inner">
+              <Leaf className="w-6 h-6" />
+            </div>
+            <div className="space-y-1">
+              <h4 className="font-bold text-sm text-[var(--text-main)]">Siz hali birorta ham e'lon qo'shmadingiz</h4>
+              <p className="text-xs text-[var(--text-muted)] max-w-sm mx-auto">
+                O'z meva, sabzavot va dehqonchilik mahsulotlaringizni joylashtiring va xaridorlar bilan bevosita bog'laning.
+              </p>
+            </div>
+            {setPage && (
+              <button
+                onClick={() => setPage('my-ads')}
+                className="mt-2 bg-[var(--color-dehqon-green)] hover:bg-[var(--color-dehqon-dark)] text-white text-xs font-bold px-4 py-2.5 rounded-xl inline-flex items-center gap-1.5 transition-all shadow-sm cursor-pointer"
+              >
+                <Plus className="w-4 h-4" />
+                Birinchi e'loningizni joylashtiring
+              </button>
+            )}
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {myProducts.map((p) => (
+              <div
+                key={p.id}
+                className="bg-[var(--bg-app)] border border-[var(--border-color)] rounded-2xl overflow-hidden shadow-sm flex flex-col justify-between group hover:border-[var(--color-dehqon-green)] transition-all"
+              >
+                <div className="relative h-40 bg-zinc-200 dark:bg-zinc-800 overflow-hidden">
+                  <img
+                    src={p.image_url}
+                    alt={p.name}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                  {p.is_premium === 1 && (
+                    <div className="absolute top-2 left-2 bg-gradient-to-r from-amber-500 to-amber-600 text-white text-[10px] font-bold px-2 py-0.5 rounded shadow-sm flex items-center gap-1">
+                      <Sparkles className="w-3 h-3 fill-amber-300" /> VIP Premium
+                    </div>
+                  )}
+                  <span className="absolute top-2 right-2 bg-black/60 backdrop-blur-md text-white text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1">
+                    <Eye className="w-3 h-3" /> {p.views}
+                  </span>
+                </div>
+
+                <div className="p-4 space-y-3 flex-1 flex flex-col justify-between">
+                  <div className="space-y-1">
+                    <span className="text-[10px] font-bold text-[var(--color-dehqon-green)] dark:text-[var(--color-dehqon-accent)] bg-[var(--dehqon-light)] dark:bg-emerald-950/20 px-2 py-0.5 rounded inline-block">
+                      {p.fruit_type || p.category}
+                    </span>
+                    <h4 className="font-bold text-sm text-[var(--text-main)] line-clamp-1">{p.name}</h4>
+                    <p className="text-xs text-[var(--text-muted)] line-clamp-2 font-light">{p.description}</p>
+                  </div>
+
+                  <div className="space-y-2 pt-2 border-t border-[var(--border-color)]">
+                    <div className="flex justify-between items-center text-xs">
+                      <span className="text-[var(--text-muted)]">Narxi:</span>
+                      <span className="font-extrabold text-[var(--color-dehqon-green)] dark:text-[var(--color-dehqon-accent)]">
+                        {p.price.toLocaleString()} so'm / {p.quantity}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center justify-between text-[11px] text-[var(--text-muted)]">
+                      <span className="flex items-center gap-1">
+                        <MapPin className="w-3 h-3 text-zinc-400" /> {p.region}
+                      </span>
+                      <button
+                        onClick={() => handleDeleteProduct(p.id)}
+                        className="text-red-500 hover:text-red-700 font-bold flex items-center gap-1 cursor-pointer hover:underline"
+                        title="E'lonni o'chirish"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" /> O'chirish
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         )}
       </div>
 
