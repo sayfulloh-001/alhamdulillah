@@ -1,47 +1,44 @@
-@import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;0,6..72,700;0,6..72,800;1,6..72,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
 @import "tailwindcss";
 
 @theme {
-  --font-serif: 'Newsreader', Georgia, serif;
-  --font-sans: 'Plus Jakarta Sans', sans-serif;
-  
-  --color-dehqon-green: #124E2A;
-  --color-dehqon-dark: #0D3B1F;
-  --color-dehqon-light: #EBF4EE;
-  --color-dehqon-accent: #22C55E;
-  
-  --color-brand-blue: #124E2A;
-  --color-brand-green: #16A34A;
-  --color-brand-orange: #EAB308;
-  --color-brand-darkgray: #1C2A20;
-  --color-premium-gold: #D97706;
-  --color-premium-gold-dark: #B45309;
+  --font-sans: 'Outfit', sans-serif;
+  --color-dehqon-green: #2563EB;
+  --color-dehqon-dark: #1D4ED8;
+  --color-dehqon-light: #EFF6FF;
+  --color-dehqon-accent: #10B981;
+  --color-brand-blue: #2563EB;
+  --color-brand-green: #10B981;
+  --color-brand-orange: #F59E0B;
+  --color-brand-darkgray: #1F2937;
+  --color-premium-gold: #F59E0B;
+  --color-premium-gold-dark: #D97706;
 }
 
 :root {
-  --bg-app: #F7F5F0;
+  --bg-app: #FFFFFF;
   --bg-card: #FFFFFF;
-  --bg-glass: rgba(255, 255, 255, 0.92);
-  --border-color: #E6E3DA;
-  --text-main: #1A2B20;
-  --text-muted: #56685C;
-  --shadow-color: rgba(18, 78, 42, 0.06);
+  --bg-glass: rgba(255, 255, 255, 0.9);
+  --border-color: #E5E7EB;
+  --text-main: #1F2937;
+  --text-muted: #4B5563;
+  --shadow-color: rgba(37, 99, 235, 0.08);
 
-  --color-primary: #124E2A;
-  --color-primary-hover: #0D3B1F;
-  --color-secondary: #16A34A;
-  --color-orange: #D97706;
-  --color-orange-hover: #B45309;
+  --color-primary: #2563EB;
+  --color-primary-hover: #1D4ED8;
+  --color-secondary: #10B981;
+  --color-orange: #F59E0B;
+  --color-orange-hover: #D97706;
 }
 
 .dark {
-  --bg-app: #0D1712;
-  --bg-card: #15241C;
-  --bg-glass: rgba(21, 36, 28, 0.92);
-  --border-color: #22382A;
-  --text-main: #F2F7F4;
-  --text-muted: #8EA093;
-  --shadow-color: rgba(0, 0, 0, 0.4);
+  --bg-app: #111827;
+  --bg-card: #1F2937;
+  --bg-glass: rgba(31, 41, 55, 0.9);
+  --border-color: #374151;
+  --text-main: #F9FAFB;
+  --text-muted: #9CA3AF;
+  --shadow-color: rgba(0, 0, 0, 0.3);
 }
 
 body {
@@ -50,10 +47,6 @@ body {
   color: var(--text-main);
   transition: background-color 0.3s ease, color 0.3s ease;
   overflow-x: hidden;
-}
-
-h1, h2, h3, .font-serif-header {
-  font-family: var(--font-serif);
 }
 
 /* Glassmorphism utility */
@@ -65,7 +58,7 @@ h1, h2, h3, .font-serif-header {
   box-shadow: 0 8px 32px 0 var(--shadow-color);
 }
 
-/* Custom Scrollbars */
+/* Smooth custom scrollbars */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -87,25 +80,25 @@ h1, h2, h3, .font-serif-header {
 /* Skeleton loader animation */
 @keyframes skeleton-loading {
   0% {
-    background-color: rgba(18, 78, 42, 0.05);
+    background-color: rgba(46, 125, 50, 0.06);
   }
   50% {
-    background-color: rgba(18, 78, 42, 0.12);
+    background-color: rgba(46, 125, 50, 0.15);
   }
   100% {
-    background-color: rgba(18, 78, 42, 0.05);
+    background-color: rgba(46, 125, 50, 0.06);
   }
 }
 
 @keyframes skeleton-loading-dark {
   0% {
-    background-color: rgba(255, 255, 255, 0.04);
+    background-color: rgba(245, 245, 245, 0.04);
   }
   50% {
-    background-color: rgba(255, 255, 255, 0.08);
+    background-color: rgba(245, 245, 245, 0.1);
   }
   100% {
-    background-color: rgba(255, 255, 255, 0.04);
+    background-color: rgba(245, 245, 245, 0.04);
   }
 }
 
