@@ -58,15 +58,11 @@ function App() {
     }
   }, [toast]);
 
-  // Poll for notifications count seamlessly in real-time
+  // Poll for notifications count when logged in
   useEffect(() => {
     if (currentUser) {
       fetchNotificationsCount();
-      const interval = setInterval(() => {
-        if (document.visibilityState === 'visible') {
-          fetchNotificationsCount();
-        }
-      }, 3000);
+      const interval = setInterval(fetchNotificationsCount, 30000); // 30s
       return () => clearInterval(interval);
     }
   }, [currentUser]);
