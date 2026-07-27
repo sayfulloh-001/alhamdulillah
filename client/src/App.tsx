@@ -96,7 +96,12 @@ function App() {
     }
 
     if (!token) {
-      setCurrentPage('register');
+      const savedPage = cookieStorage.getItem('dehqon_active_page');
+      if (savedPage && savedPage !== 'register' && savedPage !== 'my-ads' && savedPage !== 'profile') {
+        setCurrentPage(savedPage);
+      } else {
+        setCurrentPage('home');
+      }
       setLoading(false);
       return;
     }
@@ -194,8 +199,8 @@ function App() {
     );
   }
 
-  // If not logged in, force Register page
-  if (!currentUser && currentPage === 'register') {
+  // If not logged in and requesting auth-required screens (register, my-ads, profile), show Register/Login screen
+  if (!currentUser && (currentPage === 'register' || currentPage === 'my-ads' || currentPage === 'profile')) {
     return <Register onRegisterSuccess={handleRegisterSuccess} />;
   }
 
